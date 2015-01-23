@@ -18,4 +18,5 @@ find_package(Qt5Xml REQUIRED)
 add_subdirectory(diff_match_patch)
 
 add_executable(qmlfmt qmlfmt.cpp)
+target_compile_options(qmlfmt PRIVATE -analyze -WX)
 target_link_libraries(qmlfmt Qt5::Widgets Qt5::Script Qt5::Xml Qt5::Network Qt5::Concurrent diff_match_patch qmljs)

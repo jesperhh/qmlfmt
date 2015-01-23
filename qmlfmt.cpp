@@ -1,3 +1,5 @@
+#pragma warning(disable: 28182 6308 6385)
+
 #include <time.h>
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -11,6 +13,8 @@
 #include <qmljs/qmljsreformatter.h>
 
 #include <diff_match_patch.h>
+
+#pragma warning(default: 28182 6308 6385)
 
 namespace {
     QCommandLineParser parser;

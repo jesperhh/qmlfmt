@@ -1,7 +1,7 @@
 set(sources
-	diff_match_patch.cpp
-	diff_match_patch.h
-	)
+    diff_match_patch.cpp
+    diff_match_patch.h
+    )
 
 add_library(diff_match_patch STATIC ${sources})
 
