@@ -4,6 +4,7 @@ qmlfmt - command line application that formats QML files
 ## Build instructions
 Requires
 - CMake 3.0 or later
+- Qt 5.2 or later.
 - Tested with Visual Studio 2013 and mingw 4.9.1.
   - Should also compile on Linux, but not tested.
 - Optionally QtCreator source code.
