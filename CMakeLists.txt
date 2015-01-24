@@ -4,19 +4,25 @@ project(qmlfmt)
 
 cmake_policy(SET CMP0022 NEW)
 
-include(QtCreator/QtCreator.cmake)
-
-set(CMAKE_PREFIX_PATH "C:/Qt/5.3/msvc2013_64")
+IF(NOT CMAKE_BUILD_TYPE)
+  SET(CMAKE_BUILD_TYPE Release CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE)
+ENDIF(NOT CMAKE_BUILD_TYPE)
 
 find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5Script REQUIRED)
-find_package(Qt5Xml REQUIRED)
+
+include(QtCreator/QtCreator.cmake)
+
+set(CMAKE_PREFIX_PATH "C:/Qt/5.4/msvc2013_64" CACHE PATH "Qt 5 install dir")
 
 add_subdirectory(diff_match_patch)
 
 add_executable(qmlfmt qmlfmt.cpp)
-target_compile_options(qmlfmt PRIVATE -analyze -WX)
-target_link_libraries(qmlfmt Qt5::Widgets Qt5::Script Qt5::Xml Qt5::Network Qt5::Concurrent diff_match_patch qmljs)
+target_link_libraries(qmlfmt qmljs diff_match_patch Qt5::Core)
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_compile_options(qmlfmt PRIVATE -std=c++11 -Wall)
+elseif(MSVC)
+	target_compile_options(qmlfmt PRIVATE -analyze -WX -wd28182 -wd6308 -wd6385)
+endif()
