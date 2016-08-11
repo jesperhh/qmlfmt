@@ -6,6 +6,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
+#include <qmljs/parser/qmljsengine_p.h>
 #include <qmljs/qmljsdocument.h>
 #include <qmljs/qmljsmodelmanagerinterface.h>
 #include <qmljs/qmljsreformatter.h>

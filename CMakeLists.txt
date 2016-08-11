@@ -14,8 +14,6 @@ find_package(Qt5Core REQUIRED)
 
 include(QtCreator/QtCreator.cmake)
 
-set(CMAKE_PREFIX_PATH "C:/Qt/5.4/msvc2013_64" CACHE PATH "Qt 5 install dir")
-
 add_subdirectory(diff_match_patch)
 
 add_executable(qmlfmt qmlfmt.cpp)
