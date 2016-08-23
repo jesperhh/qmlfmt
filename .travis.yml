@@ -1,0 +1,29 @@
+language: cpp
+sudo: required
+dist: trusty
+
+compiler:
+  - gcc
+
+before_install:
+  - sh -c "sudo apt-get install -qq build-essential g++ python-software-properties"
+  - sh -c "sudo add-apt-repository ppa:beineri/opt-qt57-trusty -y"
+  - sh -c "sudo add-apt-repository ppa:kalakris/cmake -y; sudo apt-get update -qq; sudo apt-get install -qq cmake"
+
+before_script:
+  - /opt/qt57/bin/qt57-env.sh
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script: make
+
+deploy:
+  provider: releases
+  api-key: 
+    secure: "GGtmz5ZtMmYFPFynNGTlQRMYb8yPDIDUZTckNh+BQFHm7zcAonTb/CkMI/idhOrJQ/FAOb0nMcy3y3d0WA/EhG+Dl/D7cbhWPE7o9nwXGPo5/E/fNzltqKQlkd+r2cCiSlHuZLE2A3n2hNrJcvRbxEuHSXmj5bQE9kNvU3c8Yik="
+  file: qmlfmt
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
