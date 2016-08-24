@@ -18,11 +18,14 @@ before_script:
 
 script: make
 
+after_success:
+  - tar -czf qmlfmt.tar.gz qmlfmt
+
 deploy:
   provider: releases
   api-key: 
     secure: "TImQ2gleoniWmeG4CTGR0aaN+fsU27Bg6yAPK4t1ckI5O56LHYYrNDe6nhC/CEOmpKtT8nkkD53t/2MyheQWKqKUVXFQdk24t5kItOfypsZYMFU8XKmUMaGwMeD2BeI9hOqGISnD3bTgq/2aSX8CPuz8aXk9bkEqtagGNZGc80I="
-  file: qmlfmt
+  file: qmlfmt.tar.gz
   skip_cleanup: true
   on:
     tags: true
