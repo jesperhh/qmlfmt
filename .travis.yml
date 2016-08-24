@@ -21,7 +21,7 @@ script: make
 deploy:
   provider: releases
   api-key: 
-    secure: "mFWH9fhhMc6Rq6Zky0KVxrP3B3ybidMTh1RECdfyoXm/+QasyxZ6h9HWfBItr0qPcX8+UDoGbxSXPjIzEPkUo34jPvYCqpwv7haSaOu0pfwPlJJKN215tCVHBAKJ8qFR2dwbRU4+UsUWGfzl+4jBh5lLEFAlaCKskmcLLSkvUmI="
+    secure: "TImQ2gleoniWmeG4CTGR0aaN+fsU27Bg6yAPK4t1ckI5O56LHYYrNDe6nhC/CEOmpKtT8nkkD53t/2MyheQWKqKUVXFQdk24t5kItOfypsZYMFU8XKmUMaGwMeD2BeI9hOqGISnD3bTgq/2aSX8CPuz8aXk9bkEqtagGNZGc80I="
   file: qmlfmt
   skip_cleanup: true
   on:
