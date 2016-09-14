@@ -36,11 +36,10 @@ namespace {
     int handle(QIODevice& input, const QString& path)
     {
         QTextStream qstdout(stdout);
-        QString source = QString::fromUtf8(input.readAll());
+        const QString source = QString::fromUtf8(input.readAll());
+        const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(path);
 
-        QmlJS::Document::MutablePtr document = QmlJS::Document::create(path,
-            QmlJS::ModelManagerInterface::guessLanguageOfFile(path));
-
+        QmlJS::Document::MutablePtr document = QmlJS::Document::create(path, dialect);
         document->setSource(source);
         document->parse();      
         if (!document->diagnosticMessages().isEmpty())
@@ -178,6 +177,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    new QmlJS::ModelManagerInterface();
     if (parser.positionalArguments().count() > 0)
         return handle(parser.positionalArguments().first());
     else
