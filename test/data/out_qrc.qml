@@ -1,0 +1,4 @@
+import "qrc:/test/"
+
+Item {
+}

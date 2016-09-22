@@ -16,7 +16,9 @@ before_script:
   - cd build
   - cmake ..
 
-script: make
+script: 
+  - make
+  - ./testrunner
 
 after_success:
   - tar -czf qmlfmt.tar.gz qmlfmt
