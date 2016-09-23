@@ -18,7 +18,7 @@ before_script:
 
 script: 
   - make
-  - ./testrunner
+  - make check
 
 after_success:
   - tar -czf qmlfmt.tar.gz qmlfmt
