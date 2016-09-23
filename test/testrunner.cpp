@@ -93,7 +93,7 @@ QString TestRunner::getTemporaryFileName()
 
 void TestRunner::init()
 {
-    m_process = std::make_unique<QProcess>();
+    m_process.reset(new QProcess());
     m_process->setProgram(m_qmlfmtPath);
 }
 
