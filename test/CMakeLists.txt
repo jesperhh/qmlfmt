@@ -26,6 +26,8 @@
 
 find_package(Qt5Test REQUIRED)
 
+add_definitions(-std=c++11)
+
 add_executable(testrunner testrunner.cpp)
 
 target_link_libraries(testrunner Qt5::Test)
