@@ -28,4 +28,8 @@ find_package(Qt5Test REQUIRED)
 
 add_executable(testrunner testrunner.cpp)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_compile_options(testrunner PRIVATE -std=c++11)
+endif()
+
 target_link_libraries(testrunner Qt5::Test)
