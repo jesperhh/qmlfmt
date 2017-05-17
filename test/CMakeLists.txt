@@ -26,6 +26,8 @@
 
 find_package(Qt5Test REQUIRED)
 
+add_definitions(-std=c++11)
+
 add_executable(testrunner testrunner.cpp)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
