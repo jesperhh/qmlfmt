@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/jesperhh/qmlfmt.svg?branch=master)](https://travis-ci.org/jesperhh/qmlfmt)
+[![Build status](https://ci.appveyor.com/api/projects/status/qti9p9s9q9r3pkoo/branch/master?svg=true)](https://ci.appveyor.com/project/jesperhh/qmlfmt/branch/master)
+
 # qmlfmt
 qmlfmt - command line application that formats QML files
 
