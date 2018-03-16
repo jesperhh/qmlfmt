@@ -78,8 +78,7 @@ namespace {
                 {
                     qstdout << (msg.isError() ? "Error:" : "Warning:");
 
-                    if (msg.loc.isValid())
-                        qstdout << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
+                    qstdout << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
 
                     qstdout << ' ' << msg.message << "\n";
                 }

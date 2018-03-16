@@ -7,7 +7,7 @@ compiler:
 
 before_install:
   - sh -c "sudo apt-get install -qq build-essential g++ python-software-properties"
-  - sh -c "sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y"
+  - sh -c "sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty -y"
   - sh -c "sudo add-apt-repository ppa:george-edison55/cmake-3.x -y; sudo apt-get update -qq; sudo apt-get install -qq cmake qt-latest -y"
 
 before_script:
