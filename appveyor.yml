@@ -1,6 +1,7 @@
 version: 1.0.{build}
 configuration: Release
 platform: x64
+image: Visual Studio 2017
 environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 before_build:
