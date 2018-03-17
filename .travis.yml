@@ -1,9 +1,6 @@
-language: cpp
+language: generic
 sudo: required
 dist: trusty
-compiler:
-  - gcc
-
 addons:
   apt:
     sources:
@@ -19,7 +16,7 @@ addons:
       - qt510-meta-minimal
       - qt510script
 env:
-  - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+  - COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
 before_script:
   - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
@@ -41,4 +38,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    all_branches: true
+    branch: master
