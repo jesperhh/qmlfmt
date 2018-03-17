@@ -17,6 +17,7 @@ addons:
       - cmake
       - cmake-data
       - qt510-meta-minimal
+      - qt510script
 
 before_script:
   - source /opt/qt510/bin/qt510-env.sh
