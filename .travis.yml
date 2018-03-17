@@ -10,6 +10,7 @@ addons:
     sources:
       - sourceline: ppa:george-edison55/cmake-3.x
       - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+      - ubuntu-toolchain-r-test
     packages:
       - g++-5
       - python-software-properties
