@@ -11,7 +11,7 @@ addons:
       - sourceline: ppa:george-edison55/cmake-3.x
       - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
     packages:
-      - g++
+      - g++-5
       - python-software-properties
       - build-essential
       - cmake
