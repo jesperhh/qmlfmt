@@ -66,18 +66,31 @@ void TestRunner::prepareTestData()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("expected");
+    QTest::addColumn<bool>("hasError");
 
     for (auto iter = m_testFiles.cbegin(); iter != m_testFiles.cend(); iter++)
     {
-        QTest::newRow(QFileInfo(iter->first).baseName().toLatin1()) << iter->first << iter->second;
+        QTest::newRow(QFileInfo(iter->first).baseName().toLatin1()) << iter->first << iter->second << iter->first.contains("error");
     }
 }
 
-QByteArray TestRunner::readFile(const QString & fileName)
+QString TestRunner::readFile(const QString & fileName)
 {
     QFile inputFile(fileName);
     inputFile.open(QFile::ReadOnly | QFile::Text);
-    return inputFile.readAll();
+    return QString(inputFile.readAll());
+}
+
+QString TestRunner::readStdOut()
+{
+    if (!m_process->waitForFinished())
+    {
+        QTest::qFail("waitForFinished failed", __FILE__, __LINE__);
+        return QString();
+    }
+
+    QString output = QString::fromUtf8(m_process->readAllStandardOutput()).replace("\r", "");
+    return output;
 }
 
 QString TestRunner::getTemporaryFileName()
@@ -101,12 +114,12 @@ void TestRunner::PrintWithDifferences()
 {
     QFETCH(QString, input);
     QFETCH(QString, expected);
+    QFETCH(bool, hasError);
 
-    m_process->setArguments({ input, "-l" });
+    m_process->setArguments({ input, "-l", "-e" });
     m_process->start();
-    QCOMPARE(m_process->waitForFinished(), true);
-    QByteArray formatted = m_process->readAllStandardOutput();
-    QCOMPARE(input, QString::fromUtf8(formatted).trimmed());
+    QString formatted = readStdOut();
+    QCOMPARE(hasError ? readFile(expected) : input + "\n", formatted);
 }
 
 void TestRunner::DiffWithFormatted()
@@ -114,10 +127,9 @@ void TestRunner::DiffWithFormatted()
     QFETCH(QString, input);
     QFETCH(QString, expected);
 
-    m_process->setArguments({ input, "-d" });
+    m_process->setArguments({ input, "-d", "-e" });
     m_process->start();
-    QCOMPARE(m_process->waitForFinished(), true);
-    QByteArray diff = m_process->readAllStandardOutput();
+    QString diff = readStdOut();
     bool identicalFiles = readFile(input) == readFile(expected);
     QCOMPARE(input.size() == 0, identicalFiles);
 }
@@ -126,15 +138,17 @@ void TestRunner::FormatFileOverwrite()
 {
     QFETCH(QString, input);
     QFETCH(QString, expected);
+    QFETCH(bool, hasError);
 
     QString temporaryFileName = getTemporaryFileName();
     QCOMPARE(QFile::copy(input, temporaryFileName), true);
 
-    m_process->setArguments({ temporaryFileName, "-w" });
+    m_process->setArguments({ temporaryFileName, "-w", "-e" });
     m_process->start();
     QCOMPARE(m_process->waitForFinished(), true);
-    QByteArray formattedQml = readFile(temporaryFileName);
-    QByteArray expectedQml = readFile(expected);
+
+    QString formattedQml = readFile(temporaryFileName);
+    QString expectedQml =  readFile(hasError ? input : expected);
     QCOMPARE(expectedQml, formattedQml);
 }
 
@@ -143,11 +157,10 @@ void TestRunner::FormatFileToStdOut()
     QFETCH(QString, input);
     QFETCH(QString, expected);
 
-    m_process->setArguments({ input });
+    m_process->setArguments({ input , "-e" });
     m_process->start();
-    QCOMPARE(m_process->waitForFinished(), true);
-    QByteArray formattedQml = m_process->readAllStandardOutput().replace("\r", "");
-    QByteArray expectedQml = readFile(expected);
+    QString formattedQml = readStdOut();
+    QString expectedQml = readFile(expected);
     QCOMPARE(expectedQml, formattedQml);
 }
 
@@ -156,11 +169,12 @@ void TestRunner::FormatStdInToStdOut()
     QFETCH(QString, input);
     QFETCH(QString, expected);
 
+    m_process->setArguments({ "-e" });
     m_process->start();
     QCOMPARE(m_process->waitForStarted(), true);
-    m_process->write(readFile(input));
+
+    m_process->write(readFile(input).toUtf8());
     m_process->closeWriteChannel();
-    QCOMPARE(m_process->waitForFinished(), true);
-    QByteArray formatted = m_process->readAllStandardOutput().replace("\r", "");
-    QCOMPARE(readFile(expected), formatted);
+    QString formatted = readStdOut();
+    QCOMPARE(formatted, readFile(expected));
 }

@@ -1,0 +1,30 @@
+version: 1.0.{build}
+configuration: Release
+platform: x64
+image: Visual Studio 2017
+environment:
+  CTEST_OUTPUT_ON_FAILURE: 1
+
+before_build:
+- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.10.1/msvc2017_64/'
+build:
+  project: qmlfmt.sln
+  parallel: true
+  verbosity: normal
+after_build:
+- cmd: 7z a qmlfmt.zip %APPVEYOR_BUILD_FOLDER%\Release\qmlfmt.exe
+test_script:
+- cmd: >-
+    set PATH=C:\Qt\5.10.1\msvc2017_64\bin;%PATH%
+
+    msbuild check.vcxproj
+artifacts:
+- path: qmlfmt.zip
+  name: qmlfmt
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: a/eMX85I7Kw+Mk4vfjfg5pN+jMqjfq4hXr3/JxIDeqcp+s+3iWV+r/TwUVQRSxAj
+  artifact: qmlfmt
+  on:
+    branch: master

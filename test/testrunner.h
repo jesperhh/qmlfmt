@@ -44,7 +44,9 @@ private:
 
     void prepareTestData();
 
-    QByteArray readFile(const QString& fileName);
+    QString readFile(const QString& fileName);
+
+    QString readStdOut();
 
     QString getTemporaryFileName();
 

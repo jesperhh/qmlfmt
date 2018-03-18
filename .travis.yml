@@ -1,17 +1,25 @@
-language: cpp
+language: generic
 sudo: required
 dist: trusty
-
-compiler:
-  - gcc
-
-before_install:
-  - sh -c "sudo apt-get install -qq build-essential g++ python-software-properties"
-  - sh -c "sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y"
-  - sh -c "sudo add-apt-repository ppa:george-edison55/cmake-3.x -y; sudo apt-get update -qq; sudo apt-get install -qq cmake qt-latest -y"
-
+addons:
+  apt:
+    sources:
+      - sourceline: ppa:george-edison55/cmake-3.x
+      - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+      - python-software-properties
+      - build-essential
+      - cmake
+      - cmake-data
+      - qt510-meta-minimal
+      - qt510script
+env:
+  - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
 before_script:
-  - source /opt/qt58/bin/qt58-env.sh
+  - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
   - cd build
   - cmake ..
@@ -31,4 +39,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    all_branches: true
+    branch: master

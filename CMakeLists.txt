@@ -24,12 +24,14 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 project(qmlfmt)
 
 cmake_policy(SET CMP0022 NEW)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
 
@@ -49,7 +51,7 @@ add_executable(qmlfmt qmlfmt.cpp)
 target_link_libraries(qmlfmt qmljs diff_match_patch Qt5::Core)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	target_compile_options(qmlfmt PRIVATE -std=c++11 -Wall)
+	target_compile_options(qmlfmt PRIVATE -Wall)
 elseif(MSVC)
 	target_compile_options(qmlfmt PRIVATE -analyze -WX -wd28182 -wd6308 -wd6385 -wd6011)
 endif()
