@@ -8,7 +8,8 @@ addons:
       - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
       - ubuntu-toolchain-r-test
     packages:
-      - g++-5
+      - gcc-4.9
+      - g++-4.9
       - python-software-properties
       - build-essential
       - cmake
@@ -16,7 +17,7 @@ addons:
       - qt510-meta-minimal
       - qt510script
 env:
-  - COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
+  - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
 before_script:
   - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
