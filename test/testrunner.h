@@ -46,7 +46,8 @@ private:
 
     QString readFile(const QString& fileName);
 
-    QString readStdOut();
+    /* Read stderr if inputFileName has suffix '-stderr', from stdout otherwise */
+    QString readStream(const QString& inputFileName = QString());
 
     QString getTemporaryFileName();
 

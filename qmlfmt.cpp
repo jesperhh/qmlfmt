@@ -64,6 +64,7 @@ namespace {
     int handle(QIODevice& input, const QString& path)
     {
         QTextStream qstdout(stdout);
+        QTextStream qstderr(stderr);
         const QString source = QString::fromUtf8(input.readAll());
         const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(path);
 
@@ -76,11 +77,11 @@ namespace {
             {
                 for (const QmlJS::DiagnosticMessage& msg : document->diagnosticMessages())
                 {
-                    qstdout << (msg.isError() ? "Error:" : "Warning:");
+                    qstderr << (msg.isError() ? "Error:" : "Warning:");
 
-                    qstdout << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
+                    qstderr << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
 
-                    qstdout << ' ' << msg.message << "\n";
+                    qstderr << ' ' << msg.message << "\n";
                 }
             }
             return 1;
@@ -156,7 +157,7 @@ namespace {
         }
         else
         {
-            QTextStream(stdout) << "Path is not valid file or directory\n";
+            QTextStream(stderr) << "Path is not valid file or directory\n";
             return 1;
         }
 
@@ -193,13 +194,13 @@ int main(int argc, char *argv[])
     // validate arguments
     if ((parser.isSet(overwriteOption) || parser.isSet(listOption)) && parser.positionalArguments().count() == 0)
     {
-        QTextStream(stdout) << "Cannot combine -" << overwriteOption.names().first() << " and -" << listOption.names().first()
+        QTextStream(stderr) << "Cannot combine -" << overwriteOption.names().first() << " and -" << listOption.names().first()
             << " with standard input\n";
         return 1;
     }
     else if (parser.isSet(diffOption) + parser.isSet(overwriteOption) + parser.isSet(listOption) > 1)
     {
-        QTextStream(stdout) << "-" << diffOption.names().first() << ", -" << overwriteOption.names().first() << " and -" <<
+        QTextStream(stderr) << "-" << diffOption.names().first() << ", -" << overwriteOption.names().first() << " and -" <<
             listOption.names().first() << " are mutually exclusive\n";
         return 1;
     }
