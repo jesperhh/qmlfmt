@@ -30,6 +30,7 @@ project(qmlfmt)
 
 cmake_policy(SET CMP0022 NEW)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS On)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)

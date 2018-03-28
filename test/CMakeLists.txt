@@ -26,7 +26,10 @@
 
 find_package(Qt5Test REQUIRED)
 
-add_executable(testrunner testrunner.cpp)
+file(GLOB QML_FILES data/*.qml)
+source_group("data" FILES ${QML_FILES})
+
+add_executable(testrunner testrunner.cpp testrunner.h main.cpp ${QML_FILES})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(testrunner PRIVATE -std=c++11)

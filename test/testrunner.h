@@ -26,8 +26,10 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QtTest/QtTest>
+#include <QObject>
 #include <memory>
+
+class QProcess;
 
 class TestRunner : public QObject
 {
@@ -46,8 +48,7 @@ private:
 
     QString readFile(const QString& fileName);
 
-    /* Read stderr if inputFileName has suffix '-stderr', from stdout otherwise */
-    QString readStream(const QString& inputFileName = QString());
+    QString readOutputStream(bool fromStdError);
 
     QString getTemporaryFileName();
 

@@ -27,18 +27,7 @@
 */
 
 #include "testrunner.h"
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-    if (app.arguments().size() < 2)
-        return 0;
-
-    TestRunner tc(app.arguments().at(1));
-    QTEST_SET_MAIN_SOURCE_PATH;
-    // Trim off the argument containing qmlfmt path, QTest will not understand it.
-    return QTest::qExec(&tc, argc - 1, argv);
-}
+#include <QtTest>
 
 TestRunner::TestRunner(const QString& qmlfmtPath, QObject *parent) : m_qmlfmtPath(qmlfmtPath)
 {
@@ -81,7 +70,7 @@ QString TestRunner::readFile(const QString & fileName)
     return QString(inputFile.readAll());
 }
 
-QString TestRunner::readStream(const QString & inputFileName)
+QString TestRunner::readOutputStream(bool fromStdError)
 {
     if (!m_process->waitForFinished())
     {
@@ -89,15 +78,8 @@ QString TestRunner::readStream(const QString & inputFileName)
         return QString();
     }
 
-    QString output;
-
-    if (inputFileName.endsWith("-stderr.qml")) {
-      output = QString::fromUtf8(m_process->readAllStandardError()).replace("\r", "");
-    }
-    else
-      output = QString::fromUtf8(m_process->readAllStandardOutput()).replace("\r", "");
-
-    return output;
+    QByteArray output = fromStdError ? m_process->readAllStandardError() : m_process->readAllStandardOutput();
+    return QString::fromUtf8(output).replace("\r", "");
 }
 
 QString TestRunner::getTemporaryFileName()
@@ -125,18 +107,19 @@ void TestRunner::PrintWithDifferences()
 
     m_process->setArguments({ input, "-l", "-e" });
     m_process->start();
-    QString formatted = readStream(input);
-    QCOMPARE(hasError ? readFile(expected) : input + "\n", formatted);
+    QString formatted = readOutputStream(hasError);
+    QCOMPARE(formatted, hasError ? readFile(expected) : input + "\n");
 }
 
 void TestRunner::DiffWithFormatted()
 {
     QFETCH(QString, input);
     QFETCH(QString, expected);
+    QFETCH(bool, hasError);
 
     m_process->setArguments({ input, "-d", "-e" });
     m_process->start();
-    QString diff = readStream(input);
+    QString diff = readOutputStream(hasError);
     bool identicalFiles = readFile(input) == readFile(expected);
     QCOMPARE(input.size() == 0, identicalFiles);
 }
@@ -156,25 +139,27 @@ void TestRunner::FormatFileOverwrite()
 
     QString formattedQml = readFile(temporaryFileName);
     QString expectedQml =  readFile(hasError ? input : expected);
-    QCOMPARE(expectedQml, formattedQml);
+    QCOMPARE(formattedQml, expectedQml);
 }
 
 void TestRunner::FormatFileToStdOut()
 {
     QFETCH(QString, input);
     QFETCH(QString, expected);
+    QFETCH(bool, hasError);
 
     m_process->setArguments({ input , "-e" });
     m_process->start();
-    QString formattedQml = readStream(input);
+    QString formattedQml = readOutputStream(hasError);
     QString expectedQml = readFile(expected);
-    QCOMPARE(expectedQml, formattedQml);
+    QCOMPARE(formattedQml, expectedQml);
 }
 
 void TestRunner::FormatStdInToStdOut()
 {
     QFETCH(QString, input);
     QFETCH(QString, expected);
+    QFETCH(bool, hasError);
 
     m_process->setArguments({ "-e" });
     m_process->start();
@@ -182,6 +167,6 @@ void TestRunner::FormatStdInToStdOut()
 
     m_process->write(readFile(input).toUtf8());
     m_process->closeWriteChannel();
-    QString formatted = readStream(input);
-    QCOMPARE(formatted, readFile(expected));
+    QString formatted = readOutputStream(hasError);
+    QCOMPARE(readFile(expected), formatted);
 }
