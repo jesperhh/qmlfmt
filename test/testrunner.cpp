@@ -81,7 +81,7 @@ QString TestRunner::readFile(const QString & fileName)
     return QString(inputFile.readAll());
 }
 
-QString TestRunner::readStdOut()
+QString TestRunner::readStream(const QString & inputFileName)
 {
     if (!m_process->waitForFinished())
     {
@@ -89,7 +89,14 @@ QString TestRunner::readStdOut()
         return QString();
     }
 
-    QString output = QString::fromUtf8(m_process->readAllStandardOutput()).replace("\r", "");
+    QString output;
+
+    if (inputFileName.endsWith("-stderr.qml")) {
+      output = QString::fromUtf8(m_process->readAllStandardError()).replace("\r", "");
+    }
+    else
+      output = QString::fromUtf8(m_process->readAllStandardOutput()).replace("\r", "");
+
     return output;
 }
 
@@ -118,7 +125,7 @@ void TestRunner::PrintWithDifferences()
 
     m_process->setArguments({ input, "-l", "-e" });
     m_process->start();
-    QString formatted = readStdOut();
+    QString formatted = readStream(input);
     QCOMPARE(hasError ? readFile(expected) : input + "\n", formatted);
 }
 
@@ -129,7 +136,7 @@ void TestRunner::DiffWithFormatted()
 
     m_process->setArguments({ input, "-d", "-e" });
     m_process->start();
-    QString diff = readStdOut();
+    QString diff = readStream(input);
     bool identicalFiles = readFile(input) == readFile(expected);
     QCOMPARE(input.size() == 0, identicalFiles);
 }
@@ -159,7 +166,7 @@ void TestRunner::FormatFileToStdOut()
 
     m_process->setArguments({ input , "-e" });
     m_process->start();
-    QString formattedQml = readStdOut();
+    QString formattedQml = readStream(input);
     QString expectedQml = readFile(expected);
     QCOMPARE(expectedQml, formattedQml);
 }
@@ -175,6 +182,6 @@ void TestRunner::FormatStdInToStdOut()
 
     m_process->write(readFile(input).toUtf8());
     m_process->closeWriteChannel();
-    QString formatted = readStdOut();
+    QString formatted = readStream(input);
     QCOMPARE(formatted, readFile(expected));
 }
