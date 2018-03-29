@@ -6,7 +6,7 @@ environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 
 before_build:
-- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.10.1/msvc2017_64/'
+- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.10.1/msvc2017_64/ -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG%'
 build:
   project: qmlfmt.sln
   parallel: true

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+  Copyright (c) 2015-2018, Jesper Hellesø Hansen
   jesperhh@gmail.com
   All rights reserved.
 
@@ -26,8 +26,9 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QtTest/QtTest>
 #include <memory>
+#include <QObject>
+#include <QProcess>
 
 class TestRunner : public QObject
 {
@@ -46,8 +47,7 @@ private:
 
     QString readFile(const QString& fileName);
 
-    /* Read stderr if inputFileName has suffix '-stderr', from stdout otherwise */
-    QString readStream(const QString& inputFileName = QString());
+    QString readOutputStream(bool fromStdError);
 
     QString getTemporaryFileName();
 
@@ -68,4 +68,7 @@ private slots:
 
     void FormatStdInToStdOut();
     void FormatStdInToStdOut_data() { prepareTestData(); }
+
+    void PrintFolderWithDifferences();
+    void PrintMultipleFilesWithDifferences();
 };

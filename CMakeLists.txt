@@ -1,4 +1,4 @@
-#  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+#  Copyright (c) 2015-2018, Jesper Hellesø Hansen
 #  jesperhh@gmail.com
 #  All rights reserved.
 #
@@ -30,10 +30,14 @@ project(qmlfmt)
 
 cmake_policy(SET CMP0022 NEW)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS On)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
+
+set(QMLFMT_VERSION 0.0 CACHE STRING "Version of qmlfmt")
+add_definitions(-DQMLFMT_VERSION="${BUILD_VERSION}")
 
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release CACHE STRING
@@ -47,13 +51,13 @@ include(QtCreator/QtCreator.cmake)
 
 add_subdirectory(diff_match_patch)
 
-add_executable(qmlfmt qmlfmt.cpp)
+add_executable(qmlfmt main.cpp qmlfmt.cpp qmlfmt.h)
 target_link_libraries(qmlfmt qmljs diff_match_patch Qt5::Core)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(qmlfmt PRIVATE -Wall)
 elseif(MSVC)
-	target_compile_options(qmlfmt PRIVATE -analyze -WX -wd28182 -wd6308 -wd6385 -wd6011)
+	target_compile_options(qmlfmt PRIVATE -analyze -W3 -WX -wd28182 -wd6308 -wd6385 -wd6011)
 endif()
 
 option(BUILD_TESTING "Build the testing tree." ON)
@@ -63,4 +67,5 @@ if(BUILD_TESTING)
 	add_subdirectory(test)
     add_test(NAME qmlfmt-test COMMAND testrunner $<TARGET_FILE:qmlfmt>)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG> --verbose --output-on-failure)
+    add_dependencies(check qmlfmt testrunner)
 endif()
