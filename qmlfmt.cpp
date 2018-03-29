@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+  Copyright (c) 2015-2018, Jesper Hellesø Hansen
   jesperhh@gmail.com
   All rights reserved.
 
@@ -27,12 +27,9 @@
 */
 
 #include <time.h>
-#include <QCoreApplication>
 #include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 #include <qmljs/parser/qmljsengine_p.h>
 #include <qmljs/qmljsdocument.h>
@@ -40,174 +37,122 @@
 #include <qmljs/qmljsreformatter.h>
 
 #include <diff_match_patch.h>
+#include "qmlfmt.h"
 
-namespace {
-    QCommandLineParser parser;
+int QmlFmt::InternalRun(QIODevice& input, const QString& path)
+{
+    QTextStream qstdout(stdout);
+    QTextStream qstderr(stderr);
+    const QString source = QString::fromUtf8(input.readAll());
+    const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(path);
 
-    QCommandLineOption diffOption("d",
-        "Do not print reformatted sources to standard output. "
-        "If a file\'s formatting is different than qmlfmt\'s, print diffs "
-        "to standard output.");
-
-    QCommandLineOption errorOption("e", "Print all errors.");
-
-    QCommandLineOption listOption("l",
-        "Do not print reformatted sources to standard output. "
-        "If a file\'s formatting is different from qmlfmt\'s, print its name "
-        "to standard output.");
-
-    QCommandLineOption overwriteOption("w",
-        "Do not print reformatted sources to standard output. "
-        "If a file\'s formatting is different from qmlfmt\'s, overwrite it "
-        "with qmlfmt\'s version.");
-
-    int handle(QIODevice& input, const QString& path)
+    QmlJS::Document::MutablePtr document = QmlJS::Document::create(path, dialect);
+    document->setSource(source);
+    document->parse();      
+    if (!document->diagnosticMessages().isEmpty())
     {
-        QTextStream qstdout(stdout);
-        QTextStream qstderr(stderr);
-        const QString source = QString::fromUtf8(input.readAll());
-        const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(path);
-
-        QmlJS::Document::MutablePtr document = QmlJS::Document::create(path, dialect);
-        document->setSource(source);
-        document->parse();      
-        if (!document->diagnosticMessages().isEmpty())
+        if (this->m_options.testFlag(Option::PrintError))
         {
-            if (parser.isSet(errorOption))
+            for (const QmlJS::DiagnosticMessage& msg : document->diagnosticMessages())
             {
-                for (const QmlJS::DiagnosticMessage& msg : document->diagnosticMessages())
-                {
-                    qstderr << (msg.isError() ? "Error:" : "Warning:");
+                qstderr << (msg.isError() ? "Error:" : "Warning:");
 
-                    qstderr << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
+                qstderr << msg.loc.startLine << ':' << msg.loc.startColumn << ':';
 
-                    qstderr << ' ' << msg.message << "\n";
-                }
+                qstderr << ' ' << msg.message << "\n";
             }
-            return 1;
         }
+        return 1;
+    }
 
-        const QString reformatted = QmlJS::reformat(document);
-        if (source == reformatted)
-            return 0;
+    const QString reformatted = QmlJS::reformat(document);
+    if (source == reformatted)
+        return 0;
 
-        if (parser.isSet(listOption))
+    if (this->m_options.testFlag(Option::ListFileName))
+    {
+        // List filename
+        qstdout << path << "\n";
+    }
+    else if (this->m_options.testFlag(Option::PrintDiff))
+    {
+        // Create and print diff
+        diff_match_patch differ;
+        const QList<Patch> patches = differ.patch_make(source, reformatted);
+        qstdout << differ.patch_toText(patches);
+    }
+    else
+    {
+        // Print reformatted file to stdout/original file
+        QFile outFile;
+        if (this->m_options.testFlag(Option::OverwriteFile))
         {
-            // List filename
-            qstdout << path << "\n";
-        }
-        else if (parser.isSet(diffOption))
-        {
-            // Create and print diff
-            diff_match_patch differ;
-            const QList<Patch> patches = differ.patch_make(source, reformatted);
-            qstdout << differ.patch_toText(patches);
+            outFile.setFileName(path);
+            outFile.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
         }
         else
         {
-            // Print reformatted file to stdout/original file
-            QFile outFile;
-            if (parser.isSet(overwriteOption))
-            {
-                outFile.setFileName(path);
-                outFile.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
-            }
-            else
-            {
-                outFile.open(stdout, QFile::WriteOnly | QFile::Text);
-            }
-            
-            const QByteArray bytes = reformatted.toUtf8();
-            outFile.write(bytes);
+            outFile.open(stdout, QFile::WriteOnly | QFile::Text);
         }
-        
-        return 0;
+
+        const QByteArray bytes = reformatted.toUtf8();
+        outFile.write(bytes);
     }
 
-    int handle()
+    return 0;
+}
+
+QmlFmt::QmlFmt(Options options)
+{
+    this->m_options = options;
+    new QmlJS::ModelManagerInterface();
+}
+
+int QmlFmt::Run()
+{
+    QFile file;
+    file.open(stdin, QFile::ReadOnly | QFile::Text);
+    return this->InternalRun(file, "stdin.qml");
+}
+
+int QmlFmt::Run(QStringList paths)
+{
+    if (paths.count() == 0)
     {
-        QFile file;
-        file.open(stdin, QFile::ReadOnly | QFile::Text);
-        return handle(file, "stdin.qml");
+        return Run();
     }
 
-    int handle(const QString& path)
+    int returnValue = 0;
+    for (const QString& fileOrDir : paths)
     {
-        QFileInfo fileInfo(path);
+        QFileInfo fileInfo(fileOrDir);
         if (fileInfo.isFile())
         {
-            QFile file(path);
+            QFile file(fileOrDir);
             file.open(QFile::ReadOnly | QFile::Text);
-            return handle(file, path);
+            returnValue |= this->InternalRun(file, fileOrDir);
         }
         else if (fileInfo.isDir())
         {
             QDirIterator iter(
-                path, 
-                QStringList{ "*.qml" }, 
-                QDir::Filter::Files, 
+                fileOrDir,
+                QStringList{ "*.qml" },
+                QDir::Filter::Files,
                 QDirIterator::IteratorFlag::Subdirectories);
 
             while (iter.hasNext())
             {
                 QFile file(iter.next());
                 file.open(QFile::ReadOnly | QFile::Text);
-                handle(file, file.fileName());
+                returnValue |= this->InternalRun(file, file.fileName());
             }
         }
         else
         {
-            QTextStream(stderr) << "Path is not valid file or directory\n";
-            return 1;
+            QTextStream(stderr) << "Path is not valid file or directory: " << fileOrDir << "\n";
+            returnValue |= 1;
         }
-
-        return 0;
-    }
-}
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("qmlfmt");
-    QCoreApplication::setApplicationVersion("0.1");
-
-    parser.setApplicationDescription(
-        "qmlfmt formats QML files."
-        "\n"
-        "Without an explicit path, it processes the standard input. "
-        "Given a file, it operates on that file; given a directory, it operates on all qml files in that directory, recursively. "
-        "(Files starting with a period are ignored.) By default, qmlfmt prints the reformatted sources to standard output."
-        );
-
-    // set up options
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addOption(diffOption);
-    parser.addOption(errorOption);
-    parser.addOption(listOption);
-    parser.addOption(overwriteOption);
-    parser.addPositionalArgument("path", "file or directory to process. If not set, qmlfmt will process the standard input.");
-
-    // process command line arguments
-    parser.process(app);
-
-    // validate arguments
-    if ((parser.isSet(overwriteOption) || parser.isSet(listOption)) && parser.positionalArguments().count() == 0)
-    {
-        QTextStream(stderr) << "Cannot combine -" << overwriteOption.names().first() << " and -" << listOption.names().first()
-            << " with standard input\n";
-        return 1;
-    }
-    else if (parser.isSet(diffOption) + parser.isSet(overwriteOption) + parser.isSet(listOption) > 1)
-    {
-        QTextStream(stderr) << "-" << diffOption.names().first() << ", -" << overwriteOption.names().first() << " and -" <<
-            listOption.names().first() << " are mutually exclusive\n";
-        return 1;
     }
 
-    new QmlJS::ModelManagerInterface();
-    if (parser.positionalArguments().count() > 0)
-        return handle(parser.positionalArguments().first());
-    else
-        return handle();
+    return returnValue;
 }

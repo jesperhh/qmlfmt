@@ -26,17 +26,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QtTest/QtTest>
-#include "testrunner.h"
+#include <QString>
 
-int main(int argc, char *argv[])
+class QmlFmt
 {
-    QCoreApplication app(argc, argv);
-    if (app.arguments().size() < 2)
-        return 0;
+public:
+    enum class Option { ListFileName = 0x1, OverwriteFile = 0x2, PrintError = 0x4, PrintDiff = 0x8};
+    Q_DECLARE_FLAGS(Options, Option)
 
-    TestRunner tc(app.arguments().at(1));
-    QTEST_SET_MAIN_SOURCE_PATH;
-    // Trim off the argument containing qmlfmt path, QTest will not understand it.
-    return QTest::qExec(&tc, argc - 1, argv);
-}
+    QmlFmt(Options options);
+    
+    int Run();
+    int Run(QStringList paths);
+
+private:
+    Options m_options;
+    int InternalRun(QIODevice& input, const QString& path);
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(QmlFmt::Options)

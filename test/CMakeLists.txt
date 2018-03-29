@@ -1,4 +1,4 @@
-#  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+#  Copyright (c) 2015-2018, Jesper Hellesø Hansen
 #  jesperhh@gmail.com
 #  All rights reserved.
 #
@@ -31,8 +31,4 @@ source_group("data" FILES ${QML_FILES})
 
 add_executable(testrunner testrunner.cpp testrunner.h main.cpp ${QML_FILES})
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	target_compile_options(testrunner PRIVATE -std=c++11)
-endif()
-
-target_link_libraries(testrunner Qt5::Test)
+target_link_libraries(testrunner Qt5::Test diff_match_patch)

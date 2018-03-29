@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+  Copyright (c) 2015-2018, Jesper Hellesø Hansen
   jesperhh@gmail.com
   All rights reserved.
 
@@ -69,4 +69,7 @@ private slots:
 
     void FormatStdInToStdOut();
     void FormatStdInToStdOut_data() { prepareTestData(); }
+
+    void PrintFolderWithDifferences();
+    void PrintMultipleFilesWithDifferences();
 };
