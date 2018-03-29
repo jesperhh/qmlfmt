@@ -63,13 +63,27 @@ void TestRunner::prepareTestData()
     {
         QTest::newRow(QFileInfo(iter->first).baseName().toLatin1()) << iter->first << iter->second << iter->first.contains("error");
     }
+
+    for (auto iter = m_testFiles.cbegin(); iter != m_testFiles.cend(); iter++)
+    {
+        if (!iter->first.contains("error"))
+            QTest::newRow(QFileInfo(iter->second).baseName().toLatin1()) << iter->second << iter->second << false;
+    }
 }
 
 QString TestRunner::readFile(const QString & fileName)
 {
+    static QHash<QString, QString> cache;
+    if (cache.contains(fileName))
+    {
+        return cache[fileName];
+    }
+
     QFile inputFile(fileName);
     inputFile.open(QFile::ReadOnly | QFile::Text);
-    return QString(inputFile.readAll());
+    QString content(inputFile.readAll());
+    cache.insert(fileName, content);
+    return content;
 }
 
 QString TestRunner::readOutputStream(bool fromStdError)
@@ -105,8 +119,17 @@ void TestRunner::PrintWithDifferences()
 
     m_process->setArguments({ input, "-l", "-e" });
     m_process->start();
-    QString formatted = readOutputStream(hasError);
-    QCOMPARE(formatted, hasError ? readFile(expected) : input + "\n");
+    QString output = readOutputStream(hasError);
+    bool identicalFiles = !hasError && readFile(input) == readFile(expected);
+
+    if (hasError)
+    {
+        QCOMPARE(output, readFile(expected));
+    }
+    else
+    {
+        QCOMPARE(output, identicalFiles ?  "" : input + "\n");
+    }
 }
 
 void TestRunner::DiffWithFormatted()
@@ -159,9 +182,9 @@ void TestRunner::FormatFileToStdOut()
 
     m_process->setArguments({ input , "-e" });
     m_process->start();
-    QString formattedQml = readOutputStream(hasError);
-    QString expectedQml = readFile(expected);
-    QCOMPARE(formattedQml, expectedQml);
+    QString output = readOutputStream(hasError);
+    bool identicalFiles = !hasError && readFile(input) == readFile(expected);
+    QCOMPARE(output, identicalFiles ? "" : readFile(expected));
 }
 
 void TestRunner::FormatStdInToStdOut()
@@ -176,8 +199,9 @@ void TestRunner::FormatStdInToStdOut()
 
     m_process->write(readFile(input).toUtf8());
     m_process->closeWriteChannel();
-    QString formatted = readOutputStream(hasError);
-    QCOMPARE(readFile(expected), formatted);
+    QString output = readOutputStream(hasError);
+    bool identicalFiles = !hasError && readFile(input) == readFile(expected);
+    QCOMPARE(output, identicalFiles ? "" : readFile(expected));
 }
 
 void TestRunner::PrintFolderWithDifferences()
