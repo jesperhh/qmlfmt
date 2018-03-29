@@ -26,10 +26,9 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QObject>
 #include <memory>
-
-class QProcess;
+#include <QObject>
+#include <QProcess>
 
 class TestRunner : public QObject
 {
