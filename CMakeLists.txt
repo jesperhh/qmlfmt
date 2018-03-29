@@ -36,6 +36,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
 
+set(QMLFMT_VERSION 0.0 CACHE STRING "Version of qmlfmt")
+add_definitions(-DQMLFMT_VERSION="${BUILD_VERSION}")
+
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release CACHE STRING
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."

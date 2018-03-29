@@ -36,7 +36,10 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName("qmlfmt");
-    QCoreApplication::setApplicationVersion("0.1");
+
+#ifdef QMLFMT_VERSION
+    QCoreApplication::setApplicationVersion(QMLFMT_VERSION);
+#endif // QMLFMT_VERSION
     
     QCommandLineParser parser;
     parser.setApplicationDescription(

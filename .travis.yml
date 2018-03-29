@@ -22,7 +22,7 @@ before_script:
   - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DQMLFMT_VERSION:STRING=$TRAVIS_TAG ..
 
 script: 
   - make
