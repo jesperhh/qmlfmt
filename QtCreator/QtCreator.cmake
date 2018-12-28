@@ -62,14 +62,13 @@ set_property(TARGET qmljs PROPERTY IMPORTED_LOCATION_RELEASE "${BINARY_DIR}/Rele
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5Script REQUIRED)
 find_package(Qt5Xml REQUIRED)
 
 set_property(TARGET qmljs PROPERTY INTERFACE_LINK_LIBRARIES
 	"${BINARY_DIR}/$<CONFIG>/${CMAKE_STATIC_LIBRARY_PREFIX}cplusplus${CMAKE_STATIC_LIBRARY_SUFFIX}"
 	"${BINARY_DIR}/$<CONFIG>/${CMAKE_STATIC_LIBRARY_PREFIX}utils${CMAKE_STATIC_LIBRARY_SUFFIX}"
 	"${BINARY_DIR}/$<CONFIG>/${CMAKE_STATIC_LIBRARY_PREFIX}languageutils${CMAKE_STATIC_LIBRARY_SUFFIX}"
-	Qt5::Widgets Qt5::Script Qt5::Xml Qt5::Network Qt5::Concurrent)
+	Qt5::Widgets Qt5::Xml Qt5::Network Qt5::Concurrent)
 
 file(MAKE_DIRECTORY "${SOURCE_DIR}/src/libs/")
 file(MAKE_DIRECTORY "${SOURCE_DIR}/src/libs/3rdparty/")
