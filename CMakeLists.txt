@@ -47,9 +47,8 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 find_package(Qt5Core REQUIRED)
 
-include(QtCreator/QtCreator.cmake)
-
 add_subdirectory(diff_match_patch)
+add_subdirectory(qmljs)
 
 add_executable(qmlfmt main.cpp qmlfmt.cpp qmlfmt.h)
 target_link_libraries(qmlfmt qmljs diff_match_patch Qt5::Core)

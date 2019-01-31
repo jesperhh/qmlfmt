@@ -128,7 +128,8 @@ void TestRunner::PrintWithDifferences()
     }
     else
     {
-        QCOMPARE(output, identicalFiles ?  "" : input + "\n");
+        expected = identicalFiles ? "" : input + "\n";
+        QCOMPARE(output, expected);
     }
 }
 
