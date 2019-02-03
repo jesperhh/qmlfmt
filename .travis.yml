@@ -7,9 +7,11 @@ addons:
       - sourceline: ppa:george-edison55/cmake-3.x
       - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
       - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-5.0
     packages:
       - gcc-4.9
       - g++-4.9
+      - clang-5.0
       - python-software-properties
       - build-essential
       - cmake
@@ -18,6 +20,7 @@ addons:
       - qt510script
 env:
   - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
+  - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
 before_script:
   - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
@@ -29,13 +32,13 @@ script:
   - make check
 
 after_success:
-  - tar -czf qmlfmt.tar.gz qmlfmt
+  - tar -czf qmlfmt.$COMPILER_NAME.tar.gz qmlfmt
 
 deploy:
   provider: releases
   api-key: 
     secure: "TImQ2gleoniWmeG4CTGR0aaN+fsU27Bg6yAPK4t1ckI5O56LHYYrNDe6nhC/CEOmpKtT8nkkD53t/2MyheQWKqKUVXFQdk24t5kItOfypsZYMFU8XKmUMaGwMeD2BeI9hOqGISnD3bTgq/2aSX8CPuz8aXk9bkEqtagGNZGc80I="
-  file: qmlfmt.tar.gz
+  file: qmlfmt.$COMPILER_NAME.tar.gz
   skip_cleanup: true
   on:
     tags: true
