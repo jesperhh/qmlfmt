@@ -57,6 +57,9 @@ file(GLOB_RECURSE utils_source
 	"${qt_creator_libs_src}/utils/*.cpp" 
 	"${qt_creator_libs_src}/utils/*.h")
 
+file(GLOB_RECURSE utils_source_mm
+	"${qt_creator_libs_src}/utils/*.mm")
+
 file(GLOB utils_source_win "${qt_creator_libs_src}/utils/consoleprocess_win.cpp" "${qt_creator_libs_src}/utils/process_ctrlc_stub.cpp")
 file(GLOB utils_source_unix "${qt_creator_libs_src}/utils/consoleprocess_unix.cpp")
 
@@ -64,6 +67,10 @@ if(WIN32)
 	list(REMOVE_ITEM utils_source ${utils_source_unix})
 else()
 	list(REMOVE_ITEM utils_source ${utils_source_win})
+endif()
+
+If(APPLE)
+	list(APPEND utils_source ${utils_source_mm})
 endif()
 
 add_library(utils STATIC ${utils_source})
