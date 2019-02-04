@@ -77,8 +77,16 @@ add_library(utils STATIC ${utils_source})
 target_compile_definitions(utils PUBLIC "QTCREATOR_UTILS_STATIC_LIB")
 target_include_directories(utils PRIVATE "${qt_creator_libs_src}")
 target_link_libraries(utils PRIVATE Qt5::Widgets Qt5::Network Qt5::Concurrent Qt5::Qml)
+
 if(WIN32)
 	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32)
+endif()
+
+if (APPLE)
+	find_library(AppKit AppKit)
+	find_library(Foundation Foundation)
+	
+	target_link_libraries(utils ${AppKit} ${Foundation})
 endif()
 
 # CPLUSPLUS
