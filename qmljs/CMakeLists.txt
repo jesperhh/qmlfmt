@@ -86,7 +86,7 @@ if (APPLE)
 	find_library(AppKit AppKit)
 	find_library(Foundation Foundation)
 	
-	target_link_libraries(utils ${AppKit} ${Foundation})
+	target_link_libraries(utils PRIVATE ${AppKit} ${Foundation})
 endif()
 
 # CPLUSPLUS

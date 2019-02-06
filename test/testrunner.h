@@ -53,6 +53,7 @@ private:
 
 private slots:
     void init();
+    void cleanup();
 
     void PrintWithDifferences();
     void PrintWithDifferences_data() { prepareTestData(); }
@@ -71,4 +72,6 @@ private slots:
 
     void PrintFolderWithDifferences();
     void PrintMultipleFilesWithDifferences();
+    void FormatWithDifferentTabAndIndentSize();
+    void InvalidIndentationError();
 };

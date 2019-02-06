@@ -65,7 +65,7 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
         return 1;
     }
 
-    const QString reformatted = QmlJS::reformat(document);
+    const QString reformatted = QmlJS::reformat(document, m_indentSize, m_tabSize);
     if (source == reformatted)
         return 0;
 
@@ -102,9 +102,11 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
     return 0;
 }
 
-QmlFmt::QmlFmt(Options options)
+QmlFmt::QmlFmt(Options options, int indentSize, int tabSize)
+    : m_options(options)
+    , m_indentSize(indentSize)
+    , m_tabSize(tabSize)
 {
-    this->m_options = options;
     new QmlJS::ModelManagerInterface();
 }
 
