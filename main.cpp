@@ -38,7 +38,7 @@ int ParseIntOption(QCommandLineParser &parser, QCommandLineOption &option)
     int optionValue = parser.value(option).toInt(&ok);
     if (!ok || optionValue < 0)
     {
-        QTextStream(stderr) << "Invalid value for option " << option.names().first() << "\n";
+        QTextStream(stderr) << "Invalid value for option " << option.names().last() << "\n";
         optionValue = -1;
     }
 
@@ -105,14 +105,14 @@ int main(int argc, char *argv[])
     // validate arguments
     if ((parser.isSet(overwriteOption) || parser.isSet(listOption)) && parser.positionalArguments().count() == 0)
     {
-        QTextStream(stderr) << "Cannot combine -" << overwriteOption.names().first() << " and -" << listOption.names().first()
+        QTextStream(stderr) << "Cannot combine -" << overwriteOption.names().last() << " and -" << listOption.names().last()
             << " with standard input\n";
         return 1;
     }
     else if (parser.isSet(diffOption) + parser.isSet(overwriteOption) + parser.isSet(listOption) > 1)
     {
-        QTextStream(stderr) << "-" << diffOption.names().first() << ", -" << overwriteOption.names().first() << " and -" <<
-            listOption.names().first() << " are mutually exclusive\n";
+        QTextStream(stderr) << "-" << diffOption.names().last() << ", -" << overwriteOption.names().last() << " and -" <<
+            listOption.names().last() << " are mutually exclusive\n";
         return 1;
     }
 
