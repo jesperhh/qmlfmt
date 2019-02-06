@@ -32,10 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
+    
     if (app.arguments().size() < 2)
-        return 0;
+      return 1;
 
-    TestRunner tc(app.arguments().at(1));
+    TestRunner tc(app.arguments().at(argc - 1));
     QTEST_SET_MAIN_SOURCE_PATH;
     // Trim off the argument containing qmlfmt path, QTest will not understand it.
     return QTest::qExec(&tc, argc - 1, argv);

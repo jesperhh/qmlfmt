@@ -111,6 +111,11 @@ void TestRunner::init()
     m_process->setProgram(m_qmlfmtPath);
 }
 
+void TestRunner::cleanup()
+{
+    QVERIFY(m_process->exitStatus() == QProcess::ExitStatus::NormalExit);
+}
+
 void TestRunner::PrintWithDifferences()
 {
     QFETCH(QString, input);
@@ -128,7 +133,8 @@ void TestRunner::PrintWithDifferences()
     }
     else
     {
-        QCOMPARE(output, identicalFiles ?  "" : input + "\n");
+        expected = identicalFiles ? "" : input + "\n";
+        QCOMPARE(output, expected);
     }
 }
 
@@ -253,4 +259,40 @@ void TestRunner::PrintMultipleFilesWithDifferences()
     QString stdError = readOutputStream(true);
     QCOMPARE(stdOut, changedFiles);
     QCOMPARE(stdError, errors);
+}
+
+void TestRunner::FormatWithDifferentTabAndIndentSize()
+{
+    QDir sourceDir = QFileInfo(QFile::decodeName(__FILE__)).absoluteDir();
+    sourceDir.cd("data");
+    QString input = sourceDir.absoluteFilePath("tab_and_indent_size_in.qml");
+    QString expectedFile = sourceDir.absoluteFilePath("tab_and_indent_size_out.qml");
+        
+    m_process->setArguments({ "-e", "-t", "20", "-i", "3" });
+    m_process->start();
+    QVERIFY(m_process->waitForStarted());
+
+    m_process->write(readFile(input).toUtf8());
+    m_process->closeWriteChannel();
+    QString output = readOutputStream(false);
+    QString expected = readFile(expectedFile);
+    QCOMPARE(output, expected);
+}
+
+void TestRunner::InvalidIndentationError()
+{
+    QDir sourceDir = QFileInfo(QFile::decodeName(__FILE__)).absoluteDir();
+    sourceDir.cd("data");
+    QString input = sourceDir.absoluteFilePath("tab_and_indent_size_in.qml");
+    QStringList arguments = { "-l", "-e", "-t" , "X", "-i", "Y", input };
+
+    m_process->setArguments(arguments);
+    m_process->start();
+
+    QString stdOut = readOutputStream(false);
+    QString stdError = readOutputStream(true);
+
+    QVERIFY(m_process->exitCode() != 0);
+    QCOMPARE(stdOut, QString());
+    QCOMPARE(stdError, "Invalid value for option indent\nInvalid value for option tab-size\n");
 }
