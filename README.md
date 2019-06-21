@@ -4,6 +4,15 @@
 # qmlfmt
 qmlfmt - command line application that formats QML files
 
+## Install via Homebrew
+
+If you are on *macOS* and using [Homebrew](https://brew.sh), you can install *qmlfmt* this way:
+
+```
+brew tap martindelille/tap
+brew install qmlfmt
+```
+
 ## Build instructions
 Requires
 - CMake 3.1 or later
