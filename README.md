@@ -9,8 +9,7 @@ qmlfmt - command line application that formats QML files
 If you are on *macOS* and using [Homebrew](https://brew.sh), you can install *qmlfmt* this way:
 
 ```
-brew tap martindelille/tap
-brew install qmlfmt
+brew install martindelille/tap/qmlfmt
 ```
 
 ## Build instructions
