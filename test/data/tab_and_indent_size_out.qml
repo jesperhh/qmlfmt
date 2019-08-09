@@ -15,8 +15,7 @@ Window {
                                                                                 Testing */
       }
    }
-   Test {
-   }
+   Test {}
 
    Text {
       text: qsTr("Hello World")

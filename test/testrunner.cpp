@@ -296,3 +296,15 @@ void TestRunner::InvalidIndentationError()
     QCOMPARE(stdOut, QString());
     QCOMPARE(stdError, "Invalid value for option indent\nInvalid value for option tab-size\n");
 }
+
+void TestRunner::VersionNumberIncluded()
+{
+    QStringList arguments = { "-v"};
+
+    m_process->setArguments(arguments);
+    m_process->start();
+    QString stdOut = readOutputStream(false);
+    QString version(QMLFMT_VERSION);
+    QVERIFY(!version.isEmpty());
+    QCOMPARE(stdOut, QString("qmlfmt ") + version + "\n");
+}

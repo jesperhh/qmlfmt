@@ -74,4 +74,5 @@ private slots:
     void PrintMultipleFilesWithDifferences();
     void FormatWithDifferentTabAndIndentSize();
     void InvalidIndentationError();
+    void VersionNumberIncluded();
 };
