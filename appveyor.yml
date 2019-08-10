@@ -7,7 +7,7 @@ environment:
 install:
 - cmd: git submodule update --init qt-creator
 before_build:
-- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.13.0/msvc2017_64/ -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG%'
+- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.13.0/msvc2017_64/ -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME%'
 build:
   project: qmlfmt.sln
   parallel: true
@@ -29,3 +29,4 @@ deploy:
   artifact: qmlfmt
   on:
     branch: master
+    APPVEYOR_REPO_TAG: true
