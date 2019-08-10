@@ -17,6 +17,7 @@ addons:
       - cmake
       - cmake-data
       - qt512-meta-minimal
+      - libgl1-mesa-dev
 env:
   - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
   - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
