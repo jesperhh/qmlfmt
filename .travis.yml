@@ -1,15 +1,14 @@
 language: generic
 sudo: required
-dist: trusty
+dist: xenial
 git:
   submodules: false
 addons:
   apt:
     sources:
-      - sourceline: ppa:george-edison55/cmake-3.x
-      - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+      - sourceline: ppa:beineri/opt-qt-5.12.3-xenial
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-trusty-5.0
+      - llvm-toolchain-xenial-5.0
     packages:
       - gcc-4.9
       - g++-4.9
