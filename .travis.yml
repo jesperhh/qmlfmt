@@ -16,14 +16,13 @@ addons:
       - build-essential
       - cmake
       - cmake-data
-      - qt510-meta-minimal
-      - qt510script
+      - qt512-meta-minimal
 env:
   - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
   - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
 before_script:
   - git submodule update --init qt-creator
-  - source /opt/qt510/bin/qt510-env.sh
+  - source /opt/qt512/bin/qt512-env.sh
   - mkdir build
   - cd build
   - cmake -DQMLFMT_VERSION:STRING=$TRAVIS_TAG ..
