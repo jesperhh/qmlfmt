@@ -1,6 +1,8 @@
 language: generic
 sudo: required
 dist: trusty
+git:
+  submodules: false
 addons:
   apt:
     sources:
@@ -22,6 +24,7 @@ env:
   - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
   - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
 before_script:
+  - git submodule update --init qt-creator
   - source /opt/qt510/bin/qt510-env.sh
   - mkdir build
   - cd build
