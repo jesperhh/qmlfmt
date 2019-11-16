@@ -50,9 +50,7 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName("qmlfmt");
 
-#ifdef QMLFMT_VERSION
-    QCoreApplication::setApplicationVersion(QMLFMT_VERSION);
-#endif // QMLFMT_VERSION
+    QCoreApplication::setApplicationVersion(QMLFMT_VERSION " based on Qt Creator " QT_CREATOR_VERSION);
     
     QCommandLineParser parser;
     parser.setApplicationDescription(

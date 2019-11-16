@@ -1,13 +1,13 @@
 language: generic
 sudo: required
-dist: trusty
+dist: xenial
+git:
+  submodules: false
 addons:
   apt:
     sources:
-      - sourceline: ppa:george-edison55/cmake-3.x
-      - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+      - sourceline: ppa:beineri/opt-qt-5.12.3-xenial
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-trusty-5.0
     packages:
       - gcc-4.9
       - g++-4.9
@@ -16,13 +16,14 @@ addons:
       - build-essential
       - cmake
       - cmake-data
-      - qt510-meta-minimal
-      - qt510script
+      - qt512-meta-minimal
+      - libgl1-mesa-dev
 env:
   - COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
   - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
 before_script:
-  - source /opt/qt510/bin/qt510-env.sh
+  - git submodule update --init qt-creator
+  - source /opt/qt512/bin/qt512-env.sh
   - mkdir build
   - cd build
   - cmake -DQMLFMT_VERSION:STRING=$TRAVIS_TAG ..
