@@ -39,6 +39,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR true)
 set(QMLFMT_VERSION 0.0 CACHE STRING "Version of qmlfmt")
 add_definitions(-DQMLFMT_VERSION="${QMLFMT_VERSION}")
 
+include(qt-creator/cmake/QtCreatorIDEBranding.cmake)
+add_definitions(-DQT_CREATOR_VERSION="${IDE_VERSION}")
+
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release CACHE STRING
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
