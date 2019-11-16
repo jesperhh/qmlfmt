@@ -48,10 +48,10 @@ int ParseIntOption(QCommandLineParser &parser, QCommandLineOption &option)
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("qmlfmt");
+    app.setApplicationName("qmlfmt");
+    app.setApplicationVersion(QMLFMT_VERSION " based on Qt Creator " QT_CREATOR_VERSION);
+    app.setOrganizationDomain("www.oktet.net");
 
-    QCoreApplication::setApplicationVersion(QMLFMT_VERSION " based on Qt Creator " QT_CREATOR_VERSION);
-    
     QCommandLineParser parser;
     parser.setApplicationDescription(
         "qmlfmt formats QML files."

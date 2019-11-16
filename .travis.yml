@@ -44,3 +44,7 @@ deploy:
   on:
     tags: true
     branch: master
+
+branches:
+  only:
+    - master
