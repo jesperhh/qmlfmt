@@ -31,6 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include "qmlfmt.h"
+#include "main.h"
 
 int ParseIntOption(QCommandLineParser &parser, QCommandLineOption &option)
 {
@@ -45,12 +46,17 @@ int ParseIntOption(QCommandLineParser &parser, QCommandLineOption &option)
     return optionValue;
 }
 
-int main(int argc, char *argv[])
+void SetupVersionInfo(QCoreApplication &app)
 {
-    QCoreApplication app(argc, argv);
     app.setApplicationName("qmlfmt");
     app.setApplicationVersion(QMLFMT_VERSION " based on Qt Creator " QT_CREATOR_VERSION);
     app.setOrganizationDomain("www.oktet.net");
+}
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    SetupVersionInfo(app);
 
     QCommandLineParser parser;
     parser.setApplicationDescription(

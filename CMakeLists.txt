@@ -36,10 +36,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
 
-set(QMLFMT_VERSION 0.0 CACHE STRING "Version of qmlfmt")
-add_definitions(-DQMLFMT_VERSION="${QMLFMT_VERSION}")
-
 include(qt-creator/cmake/QtCreatorIDEBranding.cmake)
+
+set(QMLFMT_VERSION "" CACHE STRING "Version of qmlfmt")
+set(QMLFMT_COMMIT "" CACHE STRING "Commit hash of qmlfmt")
+
+if (not QMLFMT_VERSION STREQUAL "")
+  add_definitions(-DQMLFMT_VERSION="${QMLFMT_VERSION}")
+else()
+  add_definitions(-DQMLFMT_VERSION="${QMLFMT_COMMIT}")
+endif()
+
 add_definitions(-DQT_CREATOR_VERSION="${IDE_VERSION}")
 
 IF(NOT CMAKE_BUILD_TYPE)

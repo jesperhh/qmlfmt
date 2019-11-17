@@ -26,7 +26,7 @@ before_script:
   - source /opt/qt512/bin/qt512-env.sh
   - mkdir build
   - cd build
-  - cmake -DQMLFMT_VERSION:STRING=$TRAVIS_TAG ..
+  - cmake -DQMLFMT_VERSION:STRING=$TRAVIS_TAG -DQMLFMT_COMMIT:STRING=$TRAVIS_COMMIT ..
 
 script: 
   - make
