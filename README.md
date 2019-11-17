@@ -21,7 +21,7 @@ Requires
 
 After checking out the repository, `cd` to it and run:
 
-    git submodule update --init --recursive
+    git submodule update --init qt-creator
     mkdir build
     cd build
     cmake ..
