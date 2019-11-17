@@ -297,6 +297,8 @@ void TestRunner::InvalidIndentationError()
     QCOMPARE(stdError, "Invalid value for option indent\nInvalid value for option tab-size\n");
 }
 
+#define BASED_ON " based on Qt Creator "
+
 void TestRunner::VersionNumberIncluded()
 {
     QStringList arguments = { "-v"};
@@ -306,6 +308,7 @@ void TestRunner::VersionNumberIncluded()
     QString stdOut = readOutputStream(false);
     
     QString version(QMLFMT_VERSION " based on Qt Creator " QT_CREATOR_VERSION);
-    QVERIFY(!version.isEmpty());
+    QVERIFY(!QString(QMLFMT_VERSION).isEmpty());
+    QVERIFY(!QString(QT_CREATOR_VERSION).isEmpty());
     QCOMPARE(stdOut, QString("qmlfmt ") + version + "\n");
 }
