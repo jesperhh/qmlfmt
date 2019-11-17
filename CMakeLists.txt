@@ -41,10 +41,10 @@ include(qt-creator/cmake/QtCreatorIDEBranding.cmake)
 set(QMLFMT_VERSION "" CACHE STRING "Version of qmlfmt")
 set(QMLFMT_COMMIT "" CACHE STRING "Commit hash of qmlfmt")
 
-if (not QMLFMT_VERSION STREQUAL "")
-  add_definitions(-DQMLFMT_VERSION="${QMLFMT_VERSION}")
-else()
+if (QMLFMT_VERSION STREQUAL "")
   add_definitions(-DQMLFMT_VERSION="${QMLFMT_COMMIT}")
+else()
+  add_definitions(-DQMLFMT_VERSION="${QMLFMT_VERSION}")
 endif()
 
 add_definitions(-DQT_CREATOR_VERSION="${IDE_VERSION}")
