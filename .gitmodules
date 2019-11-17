@@ -1,4 +1,4 @@
 [submodule "qt-creator"]
 	path = qt-creator
-	url = https://code.qt.io/cgit/qt-creator/qt-creator.git
+	url = https://github.com/qt-creator/qt-creator
 	branch = 4.10
