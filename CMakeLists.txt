@@ -78,3 +78,5 @@ if(BUILD_TESTING)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG> --verbose --output-on-failure)
     add_dependencies(check qmlfmt testrunner)
 endif()
+
+install(TARGETS qmlfmt DESTINATION bin)
