@@ -48,7 +48,7 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
 
     QmlJS::Document::MutablePtr document = QmlJS::Document::create(path, dialect);
     document->setSource(source);
-    document->parse();      
+    document->parse();
     if (!document->diagnosticMessages().isEmpty())
     {
         if (this->m_options.testFlag(Option::PrintError))
@@ -66,8 +66,6 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
     }
 
     const QString reformatted = QmlJS::reformat(document, m_indentSize, m_tabSize);
-    if (source == reformatted)
-        return 0;
 
     if (this->m_options.testFlag(Option::ListFileName))
     {
