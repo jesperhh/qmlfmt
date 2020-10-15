@@ -39,6 +39,9 @@
 #include <diff_match_patch.h>
 #include "qmlfmt.h"
 
+// Listing files with incorrect formatting, overwriting files with formatted content and printing diffs generate no output when files are identical.
+static const QmlFmt::Options SkipIdenticalFilesMask = QmlFmt::Option::ListFileName | QmlFmt::Option::OverwriteFile | QmlFmt::Option::PrintDiff;
+
 int QmlFmt::InternalRun(QIODevice& input, const QString& path)
 {
     QTextStream qstdout(stdout);
@@ -66,6 +69,12 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
     }
 
     const QString reformatted = QmlJS::reformat(document, m_indentSize, m_tabSize);
+
+    // Only continue if we are printing to stdout, in that case we should always print the file content,
+    // changed or not. If we are printing diff/overwriting/listing files there will be nothing to do,
+    // so we can just skip this.
+    if (source == reformatted && (this->m_options & SkipIdenticalFilesMask) != 0)
+        return 0;
 
     if (this->m_options.testFlag(Option::ListFileName))
     {
