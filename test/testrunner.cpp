@@ -189,8 +189,7 @@ void TestRunner::FormatFileToStdOut()
     m_process->setArguments({ input , "-e" });
     m_process->start();
     QString output = readOutputStream(hasError);
-    bool identicalFiles = !hasError && readFile(input) == readFile(expected);
-    QCOMPARE(output, identicalFiles ? "" : readFile(expected));
+    QCOMPARE(output, readFile(expected));
 }
 
 void TestRunner::FormatStdInToStdOut()
@@ -206,8 +205,7 @@ void TestRunner::FormatStdInToStdOut()
     m_process->write(readFile(input).toUtf8());
     m_process->closeWriteChannel();
     QString output = readOutputStream(hasError);
-    bool identicalFiles = !hasError && readFile(input) == readFile(expected);
-    QCOMPARE(output, identicalFiles ? "" : readFile(expected));
+    QCOMPARE(output, readFile(expected));
 }
 
 void TestRunner::PrintFolderWithDifferences()
