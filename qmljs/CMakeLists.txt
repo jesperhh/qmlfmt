@@ -1,4 +1,4 @@
-#  Copyright (c) 2015-2016, Jesper Hellesø Hansen
+#  Copyright (c) 2015-2020, Jesper Hellesø Hansen
 #  jesperhh@gmail.com
 #  All rights reserved.
 #
@@ -59,15 +59,6 @@ file(GLOB_RECURSE utils_source
 
 file(GLOB_RECURSE utils_source_mm
 	"${qt_creator_libs_src}/utils/*.mm")
-
-file(GLOB utils_source_win "${qt_creator_libs_src}/utils/consoleprocess_win.cpp" "${qt_creator_libs_src}/utils/process_ctrlc_stub.cpp")
-file(GLOB utils_source_unix "${qt_creator_libs_src}/utils/consoleprocess_unix.cpp")
-
-if(WIN32)
-	list(REMOVE_ITEM utils_source ${utils_source_unix})
-else()
-	list(REMOVE_ITEM utils_source ${utils_source_win})
-endif()
 
 If(APPLE)
 	list(APPEND utils_source ${utils_source_mm})
