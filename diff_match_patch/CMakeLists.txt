@@ -1,4 +1,4 @@
-#  Copyright (c) 2015-2018, Jesper Hellesø Hansen
+#  Copyright (c) 2015-2020, Jesper Hellesø Hansen
 #  jesperhh@gmail.com
 #  All rights reserved.
 #
