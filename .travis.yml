@@ -9,8 +9,8 @@ addons:
       - sourceline: ppa:beineri/opt-qt-5.12.3-xenial
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-6.0
-      - g++-6.0
+      - gcc-6
+      - g++-6
       - clang-5.0
       - python-software-properties
       - build-essential
@@ -19,7 +19,7 @@ addons:
       - qt512-meta-minimal
       - libgl1-mesa-dev
 env:
-  - COMPILER_NAME=gcc CXX=g++-6.0 CC=gcc-6.0
+  - COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6
   - COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
 before_script:
   - git submodule update --init qt-creator
