@@ -16,7 +16,7 @@ brew install martindelille/tap/qmlfmt
 Requires
 - CMake 3.1 or later
 - Qt 5.10 or later.
-- Tested with Visual Studio 2017, GCC 4.9 and Clang 5.0
+- Tested with Visual Studio 2017, GCC 6.0 and Clang 5.0
 - Tested on Windows, Linux and Mac OS
 
 After checking out the repository, `cd` to it and run:

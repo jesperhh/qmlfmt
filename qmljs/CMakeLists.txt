@@ -57,11 +57,26 @@ file(GLOB_RECURSE utils_source
 	"${qt_creator_libs_src}/utils/*.cpp" 
 	"${qt_creator_libs_src}/utils/*.h")
 
-file(GLOB_RECURSE utils_source_mm
-	"${qt_creator_libs_src}/utils/*.mm")
+file(GLOB_RECURSE utils_source_apple
+	"${qt_creator_libs_src}/utils/*.mm"
+	"${qt_creator_libs_src}/utils/*_mac*.h")
+
+file(GLOB utils_source_non_apple
+	"${qt_creator_libs_src}/utils/touchbar.cpp")
+
+file(GLOB utils_source_console_process
+	"${qt_creator_libs_src}/utils/consoleprocess_win.cpp"
+	"${qt_creator_libs_src}/utils/consoleprocess_unix.cpp"
+	"${qt_creator_libs_src}/utils/process_ctrlc_stub.cpp")
+
+# Not needed, and platform dependent, so just remove them
+list(REMOVE_ITEM utils_source ${utils_source_console_process})
 
 If(APPLE)
-	list(APPEND utils_source ${utils_source_mm})
+	list(APPEND utils_source ${utils_source_apple})
+	list(REMOVE_ITEM utils_source ${utils_source_non_apple})
+else()
+	list(REMOVE_ITEM utils_source ${utils_source_apple})
 endif()
 
 add_library(utils STATIC ${utils_source})
