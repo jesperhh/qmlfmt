@@ -1,13 +1,13 @@
 version: 1.0.{build}
 configuration: Release
 platform: x64
-image: Visual Studio 2017
+image: Visual Studio 2019
 environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 install:
 - cmd: git submodule update --init qt-creator
 before_build:
-- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=C:/qt/5.13/msvc2017_64/ -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
+- cmd: '"C:\Program Files (x86)\CMake\bin\cmake" ./ -G "Visual Studio 16 2019 Win64" -DCMAKE_PREFIX_PATH=C:/Qt/6.2.2/msvc2019_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 build:
   project: qmlfmt.sln
   parallel: true
@@ -16,7 +16,7 @@ after_build:
 - cmd: 7z a qmlfmt.zip %APPVEYOR_BUILD_FOLDER%\Release\qmlfmt.exe
 test_script:
 - cmd: >-
-    set PATH=C:\Qt\5.13\msvc2017_64\bin;%PATH%
+    set PATH=C:\Qt\6.2.2\msvc2019_64\bin;%PATH%
 
     msbuild check.vcxproj
 artifacts:
