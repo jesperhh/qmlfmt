@@ -27,12 +27,7 @@
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5Xml REQUIRED)
-find_package(Qt5Qml REQUIRED)
+find_package(Qt6 REQUIRED Core5Compat Qml Xml Concurrent Network Widgets Core)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII -DQT_RESTRICTED_CAST_FROM_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -DQT_DISABLE_DEPRECATED_BEFORE=0x050900 -DQT_CREATOR -DQTC_REL_TOOLS_PATH="")
 
@@ -49,7 +44,7 @@ file(GLOB_RECURSE languageutils_source
 	"${qt_creator_libs_src}/languageutils/*.h")
 
 add_library(languageutils STATIC ${languageutils_source})
-target_link_libraries(languageutils PRIVATE Qt5::Core)
+target_link_libraries(languageutils PRIVATE Qt6::Core)
 target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_BUILD_STATIC_LIB")
 
 # UTILS
@@ -80,9 +75,9 @@ else()
 endif()
 
 add_library(utils STATIC ${utils_source})
-target_compile_definitions(utils PUBLIC "QTCREATOR_UTILS_STATIC_LIB")
+target_compile_definitions(utils PUBLIC QTCREATOR_UTILS_STATIC_LIB RELATIVE_LIBEXEC_PATH=".")
 target_include_directories(utils PRIVATE "${qt_creator_libs_src}")
-target_link_libraries(utils PRIVATE Qt5::Widgets Qt5::Network Qt5::Concurrent Qt5::Qml Qt5::Xml)
+target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat)
 
 if(WIN32)
 	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32)
@@ -103,7 +98,7 @@ file(GLOB_RECURSE cplusplus_source
 	"${qt_creator_libs_src}/3rdparty/cplusplus/*.h")
 
 add_library(cplusplus STATIC ${cplusplus_source})
-target_link_libraries(cplusplus PRIVATE Qt5::Widgets utils)
+target_link_libraries(cplusplus PRIVATE Qt6::Widgets utils)
 target_compile_definitions(cplusplus PUBLIC "CPLUSPLUS_BUILD_LIB")
 target_include_directories(cplusplus PRIVATE "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")
 
@@ -113,6 +108,6 @@ file(GLOB_RECURSE qmljs_source
 	"${qt_creator_libs_src}/qmljs/*.h")
 
 add_library(qmljs STATIC ${qmljs_source})
-target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt5::Widgets Qt5::Xml)
+target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml Qt6::Core5Compat)
 target_compile_definitions(qmljs PUBLIC "QML_BUILD_STATIC_LIB" "QT_CREATOR" "QTCREATOR_UTILS_STATIC_LIB" "CPLUSPLUS_BUILD_LIB" "LANGUAGEUTILS_BUILD_STATIC_LIB")
 target_include_directories(qmljs PUBLIC "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")
