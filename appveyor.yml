@@ -8,8 +8,9 @@ environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 install:
 - git submodule update --init qt-creator
+- sh: sudo apt install libglx0
 before_build:
-- cmd: 'cmake ./ -G "Visual Studio 16 2019 Win64" -DCMAKE_PREFIX_PATH=C:/Qt/6.2.2/msvc2019_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
+- cmd: 'cmake ./ -G "Visual Studio 16 2019" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.2.2/msvc2019_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 - sh: 'cmake ./ -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.2.1/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 build_script:
 - cmd: msbuild qmlfmt.sln /p:Configuration=$Configuration
