@@ -2,13 +2,13 @@ version: 1.0.{build}
 configuration: Release
 platform: x64
 image:
-  - Visual Studio 2019
   - Ubuntu2004
+  - Visual Studio 2019
 environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 install:
+- sh: sudo apt-get -y install libgl1-mesa-dev
 - git submodule update --init qt-creator
-- sh: sudo apt-get install libgl1-mesa-dev
 before_build:
 - cmd: 'cmake ./ -G "Visual Studio 16 2019" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.2.2/msvc2019_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 - sh: 'cmake ./ -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.2.1/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
@@ -21,6 +21,7 @@ after_build:
 test_script:
 - cmd: >-
     set PATH=C:\Qt\6.2.2\msvc2019_64\bin;%PATH%
+
     msbuild check.vcxproj
 - sh: make check
 for:
