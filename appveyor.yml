@@ -18,7 +18,7 @@ build_script:
 - sh: make qmlfmt -j 2
 after_build:
 - cmd: 7z a qmlfmt-windows.zip %APPVEYOR_BUILD_FOLDER%\Release\qmlfmt.exe
-- sh: 7z a qmlfmt-linux.zip %APPVEYOR_BUILD_FOLDER%/qmlfmt
+- sh: 7z a qmlfmt-linux.zip qmlfmt
 test_script:
 - cmd: >-
     set PATH=C:\Qt\6.2.2\msvc2019_64\bin;%PATH%
