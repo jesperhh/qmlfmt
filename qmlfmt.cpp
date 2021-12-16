@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
+#include <QRegExp>
 
 #include <qmljs/parser/qmljsengine_p.h>
 #include <qmljs/qmljsdocument.h>

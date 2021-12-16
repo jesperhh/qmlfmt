@@ -29,6 +29,7 @@
 #include "testrunner.h"
 #include <time.h>
 #include <QtTest>
+#include <QRegExp>
 #include <diff_match_patch.h>
 
 TestRunner::TestRunner(const QString& qmlfmtPath, QObject *parent) : m_qmlfmtPath(qmlfmtPath)

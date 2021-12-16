@@ -31,7 +31,7 @@ project(qmlfmt)
 cmake_policy(SET CMP0022 NEW)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
@@ -55,18 +55,18 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt6 REQUIRED Core)
 
 add_subdirectory(diff_match_patch)
 add_subdirectory(qmljs)
 
 add_executable(qmlfmt main.cpp qmlfmt.cpp qmlfmt.h)
-target_link_libraries(qmlfmt qmljs diff_match_patch Qt5::Core)
+target_link_libraries(qmlfmt qmljs diff_match_patch Qt6::Core)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(qmlfmt PRIVATE -Wall)
 elseif(MSVC)
-	target_compile_options(qmlfmt PRIVATE -analyze -W3 -WX -wd28182 -wd6308 -wd6385 -wd6011)
+	target_compile_options(qmlfmt PRIVATE -W3 -WX)
 endif()
 
 option(BUILD_TESTING "Build the testing tree." ON)

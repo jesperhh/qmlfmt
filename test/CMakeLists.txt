@@ -24,11 +24,11 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-find_package(Qt5Test REQUIRED)
+find_package(Qt6Test REQUIRED)
 
 file(GLOB QML_FILES data/*.qml)
 source_group("data" FILES ${QML_FILES})
 
 add_executable(testrunner testrunner.cpp testrunner.h main.cpp ${QML_FILES})
 
-target_link_libraries(testrunner Qt5::Test diff_match_patch)
+target_link_libraries(testrunner Qt6::Test diff_match_patch)
