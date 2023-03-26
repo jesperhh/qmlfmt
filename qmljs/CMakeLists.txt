@@ -45,7 +45,7 @@ file(GLOB_RECURSE languageutils_source
 
 add_library(languageutils STATIC ${languageutils_source})
 target_link_libraries(languageutils PRIVATE Qt6::Core)
-target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_BUILD_STATIC_LIB")
+target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_STATIC_LIBRARY")
 
 # UTILS
 file(GLOB_RECURSE utils_source 
@@ -75,12 +75,12 @@ else()
 endif()
 
 add_library(utils STATIC ${utils_source})
-target_compile_definitions(utils PUBLIC QTCREATOR_UTILS_STATIC_LIB RELATIVE_LIBEXEC_PATH=".")
-target_include_directories(utils PRIVATE "${qt_creator_libs_src}")
-target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat)
+target_compile_definitions(utils PUBLIC UTILS_STATIC_LIBRARY RELATIVE_LIBEXEC_PATH=".")
+target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_libs_src}/utils/mimetypes2/" ${Qt${QT_VERSION_MAJOR}Quick_PRIVATE_INCLUDE_DIRS})
+target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat Qt6::CorePrivate)
 
 if(WIN32)
-	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32)
+	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
 endif()
 
 if (APPLE)
@@ -99,7 +99,7 @@ file(GLOB_RECURSE cplusplus_source
 
 add_library(cplusplus STATIC ${cplusplus_source})
 target_link_libraries(cplusplus PRIVATE Qt6::Widgets utils)
-target_compile_definitions(cplusplus PUBLIC "CPLUSPLUS_BUILD_LIB")
+target_compile_definitions(cplusplus PUBLIC "CPLUSPLUS_BUILD_STATIC_LIB")
 target_include_directories(cplusplus PRIVATE "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")
 
 # QMLJS
@@ -109,5 +109,5 @@ file(GLOB_RECURSE qmljs_source
 
 add_library(qmljs STATIC ${qmljs_source})
 target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml Qt6::Core5Compat)
-target_compile_definitions(qmljs PUBLIC "QML_BUILD_STATIC_LIB" "QT_CREATOR" "QTCREATOR_UTILS_STATIC_LIB" "CPLUSPLUS_BUILD_LIB" "LANGUAGEUTILS_BUILD_STATIC_LIB")
+target_compile_definitions(qmljs PUBLIC "QMLJS_STATIC_LIBRARY" "QT_CREATOR" "UTILS_STATIC_LIBRARY" "CPLUSPLUS_BUILD_STATIC_LIB" "LANGUAGEUTILS_STATIC_LIBRARY")
 target_include_directories(qmljs PUBLIC "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")

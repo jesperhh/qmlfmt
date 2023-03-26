@@ -47,10 +47,11 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
 {
     QTextStream qstdout(stdout);
     QTextStream qstderr(stderr);
+    const Utils::FilePath filePath = Utils::FilePath::fromString(path);
     const QString source = QString::fromUtf8(input.readAll());
-    const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(path);
+    const QmlJS::Dialect dialect = QmlJS::ModelManagerInterface::guessLanguageOfFile(filePath);
 
-    QmlJS::Document::MutablePtr document = QmlJS::Document::create(path, dialect);
+    QmlJS::Document::MutablePtr document = QmlJS::Document::create(filePath, dialect);
     document->setSource(source);
     document->parse();
     if (!document->diagnosticMessages().isEmpty())
@@ -69,7 +70,7 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
         return 1;
     }
 
-    const QString reformatted = QmlJS::reformat(document, m_indentSize, m_tabSize);
+    const QString reformatted = QmlJS::reformat(document, m_indentSize, m_tabSize, m_lineLength);
 
     // Only continue if we are printing to stdout, in that case we should always print the file content,
     // changed or not. If we are printing diff/overwriting/listing files there will be nothing to do,
@@ -110,10 +111,11 @@ int QmlFmt::InternalRun(QIODevice& input, const QString& path)
     return 0;
 }
 
-QmlFmt::QmlFmt(Options options, int indentSize, int tabSize)
+QmlFmt::QmlFmt(Options options, int indentSize, int tabSize, int lineLength)
     : m_options(options)
     , m_indentSize(indentSize)
     , m_tabSize(tabSize)
+    , m_lineLength(lineLength)
 {
     new QmlJS::ModelManagerInterface();
 }

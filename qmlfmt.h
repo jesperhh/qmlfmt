@@ -34,7 +34,7 @@ public:
     enum class Option { None = 0x0, ListFileName = 0x1, OverwriteFile = 0x2, PrintError = 0x4, PrintDiff = 0x8};
     Q_DECLARE_FLAGS(Options, Option)
 
-    QmlFmt(Options options, int indentSize, int tabSize);
+    QmlFmt(Options options, int indentSize, int tabSize, int lineLength);
     
     int Run();
     int Run(QStringList paths);
@@ -43,6 +43,7 @@ private:
     Options m_options;
     int m_indentSize;
     int m_tabSize;
+    int m_lineLength;
     int InternalRun(QIODevice& input, const QString& path);
 };
 
