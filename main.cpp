@@ -86,6 +86,7 @@ int main(int argc, char *argv[])
 
     QCommandLineOption indentSizeOption(QStringList() << "i" << "indent", "How many spaces to use for indentation", "indent", "4");
     QCommandLineOption tabSizeOption(QStringList() << "t" << "tab-size", "How many spaces to replace tabs with", "tab size", "4");
+    QCommandLineOption lineLengthOption(QStringList() << "b" << "line-length", "How many characters before line will be broken.", "line length", "80");
 
 
     QMultiMap<QmlFmt::Option, QCommandLineOption> optionMap = {
@@ -94,7 +95,8 @@ int main(int argc, char *argv[])
         { QmlFmt::Option::PrintError, errorOption },
         { QmlFmt::Option::OverwriteFile, overwriteOption },
         { QmlFmt::Option::None, indentSizeOption},
-        { QmlFmt::Option::None, tabSizeOption}
+        { QmlFmt::Option::None, tabSizeOption},
+        { QmlFmt::Option::None, lineLengthOption}
     };
 
     // set up options
@@ -122,6 +124,7 @@ int main(int argc, char *argv[])
 
     int indentSize = ParseIntOption(parser, indentSizeOption);
     int tabSize = ParseIntOption(parser, tabSizeOption);
+    int lineLength = ParseIntOption(parser, lineLengthOption);
 
     if (tabSize < 0 || indentSize < 0)
     {
@@ -135,6 +138,6 @@ int main(int argc, char *argv[])
             options |= (*kvp).first;
     }
 
-    QmlFmt qmlFmt(options, indentSize, tabSize);
+    QmlFmt qmlFmt(options, indentSize, tabSize, lineLength);
     return qmlFmt.Run(parser.positionalArguments());
 }
