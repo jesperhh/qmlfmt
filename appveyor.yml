@@ -44,7 +44,7 @@ for:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: a/eMX85I7Kw+Mk4vfjfg5pN+jMqjfq4hXr3/JxIDeqcp+s+3iWV+r/TwUVQRSxAj
+    secure: XIz4qTwkoW4CJdlLJMCP0u5rVojet+W6/PtmACrj1cHfQym8RWpg57omgV3nCKME
   artifact: qmlfmt-linux, qmlfmt-windows
   on:
     branch: master
