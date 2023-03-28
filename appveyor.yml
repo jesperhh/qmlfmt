@@ -21,7 +21,7 @@ after_build:
 - sh: 7z a qmlfmt-linux.zip qmlfmt
 test_script:
 - cmd: >-
-    set PATH=C:\Qt\6.2.2\msvc2019_64\bin;%PATH%
+    set PATH=C:\Qt\6.4\msvc2019_64\bin;%PATH%
 
     msbuild check.vcxproj
 - sh: make check
