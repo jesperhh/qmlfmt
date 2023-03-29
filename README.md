@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/jesperhh/qmlfmt.svg?branch=master)](https://travis-ci.org/jesperhh/qmlfmt)
 [![Build status](https://ci.appveyor.com/api/projects/status/qti9p9s9q9r3pkoo/branch/master?svg=true)](https://ci.appveyor.com/project/jesperhh/qmlfmt/branch/master)
 
 # qmlfmt
@@ -15,9 +14,9 @@ brew install martindelille/tap/qmlfmt
 ## Build instructions
 Requires
 - CMake 3.1 or later
-- Qt 5.10 or later.
-- Tested with Visual Studio 2017, GCC 6.0 and Clang 5.0
-- Tested on Windows, Linux and Mac OS
+- Qt 6.4.2 or later.
+- Tested with Visual Studio 2019 and GCC 9.4. May work with Clang as well.
+- Tested on Windows, Linux. May work on Mac OS as well.
 
 After checking out the repository, `cd` to it and run:
 
@@ -33,20 +32,26 @@ After checking out the repository, `cd` to it and run:
     Without an explicit path, it processes the standard input. Given a file, it operates on that file; given a directory, it operates on all qml files in that directory, recursively. (Files starting with a period are ignored.) By default, qmlfmt prints the reformatted sources to standard output.
 
 ### Options:
-    -?, -h, --help             Displays this help.
-    -v, --version              Displays version information.
-    -t, --tab-size <tab size>  How many spaces to replace tabs with
-    -i, --indent <indent>      How many spaces to use for indentation
-    -l, --list                 Do not print reformatted sources to standard
-                               output. If a file's formatting is different from
-                               qmlfmt's, print its name to standard output.
-    -w, --overwrite            Do not print reformatted sources to standard
-                               output. If a file's formatting is different from
-                               qmlfmt's, overwrite it with qmlfmt's version.
-    -e, --error                Print all errors.
-    -d, --diff                 Do not print reformatted sources to standard
-                               output. If a file's formatting is different than
-                               qmlfmt's, print diffs to standard output.
+    -?, -h, --help                   Displays help on commandline options.
+    --help-all                       Displays help including Qt specific options.
+    -v, --version                    Displays version information.
+    -b, --line-length <line length>  How many characters before line will be
+                                     broken.
+    -t, --tab-size <tab size>        How many spaces to replace tabs with
+    -i, --indent <indent>            How many spaces to use for indentation
+    -l, --list                       Do not print reformatted sources to standard
+                                     output. If a file's formatting is different
+                                     from qmlfmt's, print its name to standard
+                                     output.
+    -w, --overwrite                  Do not print reformatted sources to standard
+                                     output. If a file's formatting is different
+                                     from qmlfmt's, overwrite it with qmlfmt's
+                                     version.
+    -e, --error                      Print all errors.
+    -d, --diff                       Do not print reformatted sources to standard
+                                     output. If a file's formatting is different
+                                     than qmlfmt's, print diffs to standard
+                                     output.
 
 ### Arguments:
     path                       file(s) or directory to process. If not set,
