@@ -90,6 +90,7 @@ set(utils_source
 	"${qt_creator_libs_src}/utils/tasktree.cpp"
 	"${qt_creator_libs_src}/utils/temporarydirectory.cpp"
 	"${qt_creator_libs_src}/utils/terminalprocess.cpp"
+	"${qt_creator_libs_src}/utils/terminalcommand.cpp"
 	"${qt_creator_libs_src}/utils/textutils.cpp"
 	"${qt_creator_libs_src}/utils/threadutils.cpp"
 	"${qt_creator_libs_src}/utils/utilsicons.cpp"
