@@ -36,8 +36,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC true)
 set(CMAKE_INCLUDE_CURRENT_DIR true)
 
-include(qt-creator/cmake/QtCreatorIDEBranding.cmake)
-
 set(QMLFMT_VERSION "" CACHE STRING "Version of qmlfmt")
 set(QMLFMT_COMMIT "" CACHE STRING "Commit hash of qmlfmt")
 
@@ -56,6 +54,9 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
 find_package(Qt6 REQUIRED Core)
+
+include(qt-creator/cmake/QtCreatorIDEBranding.cmake)
+include(qt-creator/cmake/QtCreatorAPI.cmake)
 
 add_subdirectory(diff_match_patch)
 add_subdirectory(qmljs)

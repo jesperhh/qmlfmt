@@ -86,7 +86,9 @@ target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_
 target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat Qt6::CorePrivate ptyqt)
 
 if(WIN32)
-	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
+	add_subdirectory(${qt_creator_libs_src}/3rdparty/winpty winpty)
+	target_include_directories(utils PRIVATE "${qt_creator_libs_src}/3rdparty/winpty/")
+	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp winpty)
 endif()
 
 if (APPLE)
