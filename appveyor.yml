@@ -12,19 +12,19 @@ install:
 - git submodule update --init qt-creator
 before_build:
 - cmd: 'cmake ./ -G "Visual Studio 16 2019" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.2/msvc2019_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
-- sh: 'cmake ./ -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.2.4/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
+- sh: 'mkdir -p build; cd build; cmake .. -GNinja -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.2.4/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 build_script:
 - cmd: msbuild qmlfmt.sln /p:Configuration=Release -maxcpucount
-- sh: make qmlfmt -j 2
+- sh: ninja qmlfmt
 after_build:
 - cmd: 7z a qmlfmt-windows.zip %APPVEYOR_BUILD_FOLDER%\Release\qmlfmt.exe
-- sh: 7z a qmlfmt-linux.zip qmlfmt
+- sh: 7z a qmlfmt-linux.zip build/qmlfmt
 test_script:
 - cmd: >-
     set PATH=C:\Qt\6.2\msvc2019_64\bin;%PATH%
 
     msbuild check.vcxproj
-- sh: make check
+- sh: ninja check
 for:
   -
     matrix:
@@ -37,7 +37,7 @@ for:
   -
     matrix:
       only:
-        - image: Ubuntu2004
+        - image: Ubuntu2204
     artifacts:
      - path: qmlfmt-linux.zip
        name: qmlfmt-linux
