@@ -2,7 +2,7 @@ version: 1.0.{build}
 configuration: Release
 platform: x64
 image:
-  - Ubuntu2004
+  - Ubuntu2204
   - Visual Studio 2019
 environment:
   CTEST_OUTPUT_ON_FAILURE: 1
