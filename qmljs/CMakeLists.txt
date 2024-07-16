@@ -36,8 +36,8 @@ if(WIN32)
 endif()
 
 # QtCreator sources
-set(qt_creator_libs_src "../qt-creator/src/libs")
-set(qt_creator_src "../qt-creator/src")
+set(qt_creator_libs_src "${CMAKE_CURRENT_SOURCE_DIR}/../qt-creator/src/libs")
+set(qt_creator_src "${CMAKE_CURRENT_SOURCE_DIR}/../qt-creator/src")
 
 # LANGUAGEUTILS
 file(GLOB_RECURSE languageutils_source 
