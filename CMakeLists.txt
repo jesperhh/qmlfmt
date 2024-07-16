@@ -29,6 +29,7 @@ cmake_minimum_required(VERSION 3.1)
 project(qmlfmt)
 
 cmake_policy(SET CMP0022 NEW)
+cmake_policy(SET CMP0071 OLD)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 set(CMAKE_CXX_STANDARD 17)
