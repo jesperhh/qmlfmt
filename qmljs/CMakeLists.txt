@@ -51,7 +51,6 @@ target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_STATIC_LIBRARY")
 # UTILS
 set(utils_source 
 	"${qt_creator_libs_src}/3rdparty/libptyqt/ptyqt.cpp"
-	"${qt_creator_libs_src}/3rdparty/libptyqt/unixptyprocess.cpp"
 	"${qt_creator_libs_src}/solutions/tasking/barrier.cpp"
 	"${qt_creator_libs_src}/solutions/tasking/tasktree.cpp"
 	"${qt_creator_libs_src}/solutions/tasking/tasktreerunner.cpp"
@@ -112,13 +111,25 @@ set(utils_source
 	"${qt_creator_src}/shared/qbs/src/lib/corelib/tools/processutils.cpp"
 	)
 
+if(WIN32)
+	list(APPEND utils_source
+		"${qt_creator_libs_src}/3rdparty/libptyqt/winptyprocess.cpp"
+		)
+else()
+	list(APPEND utils_source
+		"${qt_creator_libs_src}/3rdparty/libptyqt/unixptyprocess.cpp"
+		)
+endif()
+
 add_library(utils STATIC ${utils_source})
 target_compile_definitions(utils PUBLIC UTILS_STATIC_LIBRARY RELATIVE_LIBEXEC_PATH=".")
 target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_src}/shared/qbs/src/lib/corelib/" "${qt_creator_libs_src}/utils/mimetypes2/" "${qt_creator_libs_src}/3rdparty/libptyqt/")
 target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Xml Qt6::Core5Compat Qt6::Concurrent)
 
 if(WIN32)
-	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
+	add_subdirectory(${qt_creator_libs_src}/3rdparty/winpty winpty)
+	target_include_directories(utils PRIVATE "${qt_creator_libs_src}/3rdparty/winpty/")
+	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp winpty)
 endif()
 
 if (APPLE)
