@@ -27,7 +27,7 @@
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED Core5Compat Qml Xml Concurrent Network Widgets Core)
+find_package(Qt6 REQUIRED Core5Compat Xml Network Widgets Core Concurrent)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII -DQT_RESTRICTED_CAST_FROM_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -DQT_DISABLE_DEPRECATED_BEFORE=0x050900 -DQT_CREATOR -DQTC_REL_TOOLS_PATH="")
 
@@ -36,7 +36,8 @@ if(WIN32)
 endif()
 
 # QtCreator sources
-set(qt_creator_libs_src "../qt-creator/src/libs")
+set(qt_creator_libs_src "${CMAKE_CURRENT_SOURCE_DIR}/../qt-creator/src/libs")
+set(qt_creator_src "${CMAKE_CURRENT_SOURCE_DIR}/../qt-creator/src")
 
 # LANGUAGEUTILS
 file(GLOB_RECURSE languageutils_source 
@@ -48,39 +49,94 @@ target_link_libraries(languageutils PRIVATE Qt6::Core)
 target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_STATIC_LIBRARY")
 
 # UTILS
-file(GLOB_RECURSE utils_source 
-	"${qt_creator_libs_src}/utils/*.cpp" 
-	"${qt_creator_libs_src}/utils/*.h")
+set(utils_source 
+	"${qt_creator_libs_src}/3rdparty/libptyqt/ptyqt.cpp"
+	"${qt_creator_libs_src}/solutions/tasking/barrier.cpp"
+	"${qt_creator_libs_src}/solutions/tasking/tasktree.cpp"
+	"${qt_creator_libs_src}/solutions/tasking/tasktreerunner.cpp"
+	"${qt_creator_libs_src}/utils/async.cpp"
+	"${qt_creator_libs_src}/utils/changeset.cpp"
+	"${qt_creator_libs_src}/utils/commandline.cpp"
+	"${qt_creator_libs_src}/utils/devicefileaccess.cpp"
+	"${qt_creator_libs_src}/utils/environment.cpp"
+	"${qt_creator_libs_src}/utils/externalterminalprocessimpl.cpp"
+	"${qt_creator_libs_src}/utils/filepath.cpp"
+	"${qt_creator_libs_src}/utils/filepath.cpp"
+	"${qt_creator_libs_src}/utils/filestreamer.cpp"
+	"${qt_creator_libs_src}/utils/filestreamermanager.cpp"
+	"${qt_creator_libs_src}/utils/filesystemwatcher.cpp"
+	"${qt_creator_libs_src}/utils/fileutils.cpp"
+	"${qt_creator_libs_src}/utils/fsengine/fileiconprovider.cpp"
+	"${qt_creator_libs_src}/utils/fsengine/fsengine.cpp"
+	"${qt_creator_libs_src}/utils/futuresynchronizer.cpp"
+	"${qt_creator_libs_src}/utils/globalfilechangeblocker.cpp"
+	"${qt_creator_libs_src}/utils/guard.cpp"
+	"${qt_creator_libs_src}/utils/hostosinfo.cpp"
+	"${qt_creator_libs_src}/utils/launcherinterface.cpp"
+	"${qt_creator_libs_src}/utils/launcherpackets.cpp"
+	"${qt_creator_libs_src}/utils/launchersocket.cpp"
+	"${qt_creator_libs_src}/utils/macroexpander.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimedatabase.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeglobpattern.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimemagicrule.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimemagicrulematcher.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeprovider.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimetype.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimetypeparser.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeutils.cpp"
+	"${qt_creator_libs_src}/utils/namevaluedictionary.cpp"
+	"${qt_creator_libs_src}/utils/namevalueitem.cpp"
+	"${qt_creator_libs_src}/utils/process.cpp"
+	"${qt_creator_libs_src}/utils/processhelper.cpp"
+	"${qt_creator_libs_src}/utils/processinterface.cpp"
+	"${qt_creator_libs_src}/utils/processreaper.cpp"
+	"${qt_creator_libs_src}/utils/qrcparser.cpp"
+	"${qt_creator_libs_src}/utils/qtcassert.cpp"
+	"${qt_creator_libs_src}/utils/qtcsettings.cpp"
+	"${qt_creator_libs_src}/utils/savefile.cpp"
+	"${qt_creator_libs_src}/utils/singleton.cpp"
+	"${qt_creator_libs_src}/utils/store.cpp"
+	"${qt_creator_libs_src}/utils/stringutils.cpp"
+	"${qt_creator_libs_src}/utils/stylehelper.cpp"
+	"${qt_creator_libs_src}/utils/temporarydirectory.cpp"
+	"${qt_creator_libs_src}/utils/terminalcommand.cpp"
+	"${qt_creator_libs_src}/utils/terminalhooks.cpp"
+	"${qt_creator_libs_src}/utils/terminalinterface.cpp"
+	"${qt_creator_libs_src}/utils/textutils.cpp"
+	"${qt_creator_libs_src}/utils/theme/theme.cpp"
+	"${qt_creator_libs_src}/utils/threadutils.cpp"
+	"${qt_creator_libs_src}/utils/utilsicons.cpp"
+	"${qt_creator_libs_src}/utils/winutils.cpp"
+	"${qt_creator_src}/shared/json/json.cpp"
+	"${qt_creator_src}/shared/qbs/src/lib/corelib/tools/processutils.cpp"
+	)
 
-file(GLOB_RECURSE utils_source_apple
-	"${qt_creator_libs_src}/utils/*.mm"
-	"${qt_creator_libs_src}/utils/*_mac*.h")
-
-file(GLOB utils_source_non_apple
-	"${qt_creator_libs_src}/utils/touchbar.cpp")
-
-file(GLOB utils_source_console_process
-	"${qt_creator_libs_src}/utils/consoleprocess_win.cpp"
-	"${qt_creator_libs_src}/utils/consoleprocess_unix.cpp"
-	"${qt_creator_libs_src}/utils/process_ctrlc_stub.cpp")
-
-# Not needed, and platform dependent, so just remove them
-list(REMOVE_ITEM utils_source ${utils_source_console_process})
-
-If(APPLE)
-	list(APPEND utils_source ${utils_source_apple})
-	list(REMOVE_ITEM utils_source ${utils_source_non_apple})
+if(WIN32)
+	list(APPEND utils_source
+		"${qt_creator_libs_src}/3rdparty/libptyqt/winptyprocess.cpp"
+		)
 else()
-	list(REMOVE_ITEM utils_source ${utils_source_apple})
+	list(APPEND utils_source
+		"${qt_creator_libs_src}/3rdparty/libptyqt/unixptyprocess.cpp"
+		)
 endif()
 
 add_library(utils STATIC ${utils_source})
 target_compile_definitions(utils PUBLIC UTILS_STATIC_LIBRARY RELATIVE_LIBEXEC_PATH=".")
-target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_libs_src}/utils/mimetypes2/" ${Qt${QT_VERSION_MAJOR}Quick_PRIVATE_INCLUDE_DIRS})
-target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat Qt6::CorePrivate)
+target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_src}/shared/qbs/src/lib/corelib/" "${qt_creator_libs_src}/utils/mimetypes2/" "${qt_creator_libs_src}/3rdparty/libptyqt/")
+target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Xml Qt6::Core5Compat Qt6::Concurrent)
 
 if(WIN32)
-	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
+	file(GLOB_RECURSE winpty_source
+		"${qt_creator_libs_src}/3rdparty/winpty/src/libwinpty/*.cpp"
+		"${qt_creator_libs_src}/3rdparty/winpty/src/libwinpty/*.h"
+		"${qt_creator_libs_src}/3rdparty/winpty/src/shared/*.cpp"
+		"${qt_creator_libs_src}/3rdparty/winpty/src/shared/*.h")
+	target_sources(utils PRIVATE
+		${winpty_source}
+	)
+	target_include_directories(utils PRIVATE "${qt_creator_libs_src}/3rdparty/winpty/")
+	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp winpty)
 endif()
 
 if (APPLE)
@@ -108,6 +164,6 @@ file(GLOB_RECURSE qmljs_source
 	"${qt_creator_libs_src}/qmljs/*.h")
 
 add_library(qmljs STATIC ${qmljs_source})
-target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml Qt6::Core5Compat)
+target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml Qt6::Core5Compat Qt6::Concurrent)
 target_compile_definitions(qmljs PUBLIC "QMLJS_STATIC_LIBRARY" "QT_CREATOR" "UTILS_STATIC_LIBRARY" "CPLUSPLUS_BUILD_STATIC_LIB" "LANGUAGEUTILS_STATIC_LIBRARY")
 target_include_directories(qmljs PUBLIC "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")
