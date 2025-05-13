@@ -27,7 +27,7 @@
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED Core5Compat Qml Xml Concurrent Network Widgets Core)
+find_package(Qt6 REQUIRED Qml Xml Concurrent Network Widgets Core)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII -DQT_RESTRICTED_CAST_FROM_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -DQT_DISABLE_DEPRECATED_BEFORE=0x050900 -DQT_CREATOR -DQTC_REL_TOOLS_PATH="")
 
@@ -77,7 +77,7 @@ endif()
 add_library(utils STATIC ${utils_source})
 target_compile_definitions(utils PUBLIC UTILS_STATIC_LIBRARY RELATIVE_LIBEXEC_PATH=".")
 target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_libs_src}/utils/mimetypes2/" ${Qt${QT_VERSION_MAJOR}Quick_PRIVATE_INCLUDE_DIRS})
-target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::Core5Compat Qt6::CorePrivate)
+target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::CorePrivate)
 
 if(WIN32)
 	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
@@ -108,6 +108,6 @@ file(GLOB_RECURSE qmljs_source
 	"${qt_creator_libs_src}/qmljs/*.h")
 
 add_library(qmljs STATIC ${qmljs_source})
-target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml Qt6::Core5Compat)
+target_link_libraries(qmljs PRIVATE utils languageutils cplusplus Qt6::Widgets Qt6::Xml)
 target_compile_definitions(qmljs PUBLIC "QMLJS_STATIC_LIBRARY" "QT_CREATOR" "UTILS_STATIC_LIBRARY" "CPLUSPLUS_BUILD_STATIC_LIB" "LANGUAGEUTILS_STATIC_LIBRARY")
 target_include_directories(qmljs PUBLIC "${qt_creator_libs_src}/3rdparty/" "${qt_creator_libs_src}/")
