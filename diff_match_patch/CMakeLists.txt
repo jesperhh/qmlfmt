@@ -29,10 +29,10 @@ set(sources
     diff_match_patch.h
     )
 
-find_package(Qt6 REQUIRED Core5Compat)
+find_package(Qt6 REQUIRED Core)
 
 add_library(diff_match_patch STATIC ${sources})
 
-target_link_libraries(diff_match_patch Qt6::Core Qt6::Core5Compat)
+target_link_libraries(diff_match_patch Qt6::Core)
 target_include_directories(diff_match_patch PUBLIC .)
 target_compile_definitions(diff_match_patch PUBLIC "QT_DISABLE_DEPRECATED_BEFORE=0x040900")
