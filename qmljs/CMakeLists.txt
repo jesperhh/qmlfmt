@@ -27,7 +27,7 @@
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED Qml Xml Concurrent Network Widgets Core)
+find_package(Qt6 REQUIRED Xml Network Widgets Core)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII -DQT_RESTRICTED_CAST_FROM_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -DQT_DISABLE_DEPRECATED_BEFORE=0x050900 -DQT_CREATOR -DQTC_REL_TOOLS_PATH="")
 
@@ -48,36 +48,59 @@ target_link_libraries(languageutils PRIVATE Qt6::Core)
 target_compile_definitions(languageutils PUBLIC "LANGUAGEUTILS_STATIC_LIBRARY")
 
 # UTILS
-file(GLOB_RECURSE utils_source 
-	"${qt_creator_libs_src}/utils/*.cpp" 
-	"${qt_creator_libs_src}/utils/*.h")
-
-file(GLOB_RECURSE utils_source_apple
-	"${qt_creator_libs_src}/utils/*.mm"
-	"${qt_creator_libs_src}/utils/*_mac*.h")
-
-file(GLOB utils_source_non_apple
-	"${qt_creator_libs_src}/utils/touchbar.cpp")
-
-file(GLOB utils_source_console_process
-	"${qt_creator_libs_src}/utils/consoleprocess_win.cpp"
-	"${qt_creator_libs_src}/utils/consoleprocess_unix.cpp"
-	"${qt_creator_libs_src}/utils/process_ctrlc_stub.cpp")
-
-# Not needed, and platform dependent, so just remove them
-list(REMOVE_ITEM utils_source ${utils_source_console_process})
-
-If(APPLE)
-	list(APPEND utils_source ${utils_source_apple})
-	list(REMOVE_ITEM utils_source ${utils_source_non_apple})
-else()
-	list(REMOVE_ITEM utils_source ${utils_source_apple})
-endif()
+set(utils_source 
+	"${qt_creator_libs_src}/utils/changeset.cpp"
+	"${qt_creator_libs_src}/utils/commandline.cpp"
+	"${qt_creator_libs_src}/utils/devicefileaccess.cpp"
+	"${qt_creator_libs_src}/utils/environment.cpp"
+	"${qt_creator_libs_src}/utils/filepath.cpp"
+	"${qt_creator_libs_src}/utils/filesystemwatcher.cpp"
+	"${qt_creator_libs_src}/utils/fileutils.cpp"
+	"${qt_creator_libs_src}/utils/fsengine/fileiconprovider.cpp"
+	"${qt_creator_libs_src}/utils/fsengine/fsengine.cpp"
+	"${qt_creator_libs_src}/utils/futuresynchronizer.cpp"
+	"${qt_creator_libs_src}/utils/globalfilechangeblocker.cpp"
+	"${qt_creator_libs_src}/utils/guard.cpp"
+	"${qt_creator_libs_src}/utils/hostosinfo.cpp"
+	"${qt_creator_libs_src}/utils/json.cpp"
+	"${qt_creator_libs_src}/utils/launcherinterface.cpp"
+	"${qt_creator_libs_src}/utils/launcherpackets.cpp"
+	"${qt_creator_libs_src}/utils/launchersocket.cpp"
+	"${qt_creator_libs_src}/utils/macroexpander.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimedatabase.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeglobpattern.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimemagicrule.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimemagicrulematcher.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeprovider.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimetype.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimetypeparser.cpp"
+	"${qt_creator_libs_src}/utils/mimetypes2/mimeutils.cpp"
+	"${qt_creator_libs_src}/utils/namevaluedictionary.cpp"
+	"${qt_creator_libs_src}/utils/namevalueitem.cpp"
+	"${qt_creator_libs_src}/utils/processinterface.cpp"
+	"${qt_creator_libs_src}/utils/processreaper.cpp"
+	"${qt_creator_libs_src}/utils/processutils.cpp"
+	"${qt_creator_libs_src}/utils/qrcparser.cpp"
+	"${qt_creator_libs_src}/utils/qtcassert.cpp"
+	"${qt_creator_libs_src}/utils/qtcprocess.cpp"
+	"${qt_creator_libs_src}/utils/runextensions.cpp"
+	"${qt_creator_libs_src}/utils/savefile.cpp"
+	"${qt_creator_libs_src}/utils/singleton.cpp"
+	"${qt_creator_libs_src}/utils/stringutils.cpp"
+	"${qt_creator_libs_src}/utils/tasktree.cpp"
+	"${qt_creator_libs_src}/utils/temporarydirectory.cpp"
+	"${qt_creator_libs_src}/utils/terminalprocess.cpp"
+	"${qt_creator_libs_src}/utils/terminalcommand.cpp"
+	"${qt_creator_libs_src}/utils/textutils.cpp"
+	"${qt_creator_libs_src}/utils/threadutils.cpp"
+	"${qt_creator_libs_src}/utils/utilsicons.cpp"
+	"${qt_creator_libs_src}/utils/winutils.cpp"
+	)
 
 add_library(utils STATIC ${utils_source})
 target_compile_definitions(utils PUBLIC UTILS_STATIC_LIBRARY RELATIVE_LIBEXEC_PATH=".")
-target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_libs_src}/utils/mimetypes2/" ${Qt${QT_VERSION_MAJOR}Quick_PRIVATE_INCLUDE_DIRS})
-target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::Qml Qt6::Xml Qt6::CorePrivate)
+target_include_directories(utils PRIVATE "${qt_creator_libs_src}" "${qt_creator_libs_src}/utils/" "${qt_creator_libs_src}/utils/mimetypes2/")
+target_link_libraries(utils PRIVATE Qt6::Widgets Qt6::Network Qt6::Xml)
 
 if(WIN32)
 	target_link_libraries(utils PRIVATE user32 iphlpapi ws2_32 shell32 dbghelp)
