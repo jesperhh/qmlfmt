@@ -11,8 +11,8 @@ install:
 - sh: sudo apt-get -y install libgl1-mesa-dev
 - git submodule update --init qt-creator
 before_build:
-- cmd: 'cmake ./ -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.7/msvc2022_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
-- sh: 'cmake ./ -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.7/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
+- cmd: 'cmake ./ -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.8/msvc2022_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
+- sh: 'cmake ./ -DCMAKE_BUILD_TYPE=$Configuration -DCMAKE_PREFIX_PATH=$HOME/Qt/6.8/gcc_64 -DQMLFMT_VERSION:STRING=%APPVEYOR_REPO_TAG_NAME% -DQMLFMT_COMMIT:STRING=%APPVEYOR_REPO_COMMIT%'
 build_script:
 - cmd: msbuild qmlfmt.sln /p:Configuration=Release -maxcpucount
 - sh: make qmlfmt -j 2
@@ -21,7 +21,7 @@ after_build:
 - sh: 7z a qmlfmt-linux.zip qmlfmt
 test_script:
 - cmd: >-
-    set PATH=C:\Qt\6.7\msvc2022_64\bin;%PATH%
+    set PATH=C:\Qt\6.8\msvc2022_64\bin;%PATH%
 
     msbuild check.vcxproj
 - sh: make check
