@@ -41,7 +41,7 @@ set(qt_creator_libs_src "../qt-creator/src/libs")
 # PTYQT
 set(ptyqt_sources
     "${qt_creator_libs_src}/3rdparty/libptyqt/iptyprocess.h"
-    "${qt_creator_libs_src}/3rdparty/libptyqt/ptyqt.cpp"
+    "ptyqt.cpp"
     "${qt_creator_libs_src}/3rdparty/libptyqt/ptyqt.h"
 )
 
