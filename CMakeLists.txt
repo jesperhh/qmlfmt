@@ -55,13 +55,19 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-find_package(Qt6 REQUIRED Core)
+if (UNIX)
+	find_package(Qt6 REQUIRED Core DBus)
+	list(APPEND QT_LINK_LIBS Qt6::Core Qt6::DBus)
+else()
+	find_package(Qt6 REQUIRED Core)
+	list(APPEND QT_LINK_LIBS Qt6::Core)
+endif()
 
 add_subdirectory(diff_match_patch)
 add_subdirectory(qmljs)
 
 add_executable(qmlfmt main.cpp qmlfmt.cpp qmlfmt.h)
-target_link_libraries(qmlfmt qmljs diff_match_patch Qt6::Core)
+target_link_libraries(qmlfmt qmljs diff_match_patch QT_LINK_LIBS)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(qmlfmt PRIVATE -Wall)
